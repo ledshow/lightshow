@@ -14,18 +14,22 @@ final class FrameRateEngine {
 	}
 
 	public void sleep() throws InterruptedException {
-		long nextFrame = lastFrame + rate.frameMilliseconds();
-		lastFrame = time();
-		long delay = nextFrame - time();
+		LOGGER.debug("last: {}", lastFrame / 1000000);
+		long nextFrame = lastFrame + rate.frameMilliseconds() * 1000000;
+		long now = time();
+		lastFrame = nextFrame;
+		long delay = (nextFrame - now) / 1000000;
 		if (delay <= 0) {
+			LOGGER.debug("now: {}, delay: {}, next: {}", now, delay, nextFrame);
+			LOGGER.warn("Too slow. Consider decreasing the frame rate.");
 			return;
 		}
-		LOGGER.debug("Sleeping {} ms", delay);
+		LOGGER.debug("sleeping {} ms", delay);
 		Thread.sleep(delay, 0);
 	}
 
 	private static long time() {
-		return System.nanoTime() / 1000000;
+		return System.nanoTime();
 	}
 
 }

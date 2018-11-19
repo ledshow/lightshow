@@ -10,12 +10,17 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.malkusch.lightshow.player.model.AudioStream;
 
 final class BufferedJavaSoundAudioPlayer implements AudioPlayer {
 
 	private final AudioInputStream stream;
 	private final SourceDataLine line;
+	private final Thread reader;
+	private final Logger LOGGER = LoggerFactory.getLogger(BufferedJavaSoundAudioPlayer.class);
 
 	public BufferedJavaSoundAudioPlayer(int bufferFrames, AudioStream stream)
 			throws UnsupportedAudioFileException, IOException, LineUnavailableException {
@@ -24,44 +29,47 @@ final class BufferedJavaSoundAudioPlayer implements AudioPlayer {
 		AudioFormat format = this.stream.getFormat();
 		DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
 		int bufferSize = format.getFrameSize() * bufferFrames;
-		buffer = new byte[bufferSize];
 		line = (SourceDataLine) AudioSystem.getLine(info);
 		line.open(format, bufferSize);
+
+		reader = new Thread(this::fillBuffer, "audio");
 	}
 
 	@Override
 	public void startPlayback() {
 		line.start();
+		reader.start();
 	}
 
-	private boolean hasFrames = true;
+	private volatile boolean hasFrames = true;
 
 	@Override
 	public boolean hasFrames() {
 		return hasFrames;
 	}
 
-	private final byte[] buffer;
+	private void fillBuffer() {
+		try {
+			byte[] buffer = new byte[line.getBufferSize() * 5];
+			int read;
+			while (hasFrames && (read = stream.read(buffer)) != -1) {
+				LOGGER.debug("read {} bytes", read);
+				int offset = 0;
+				int length = read;
+				int written = 0;
+				while (hasFrames && length > 0) {
+					written = line.write(buffer, offset, length);
+					LOGGER.debug("wrote {} bytes", written);
+					offset += written;
+					length -= offset;
+				}
+			}
 
-	@Override
-	public void fillBuffer() throws IOException {
-		int length = line.available();
-		if (length > buffer.length) {
-			length = buffer.length;
-		}
-		if (length == 0) {
-			return;
-		}
+		} catch (IOException e) {
+			LOGGER.error("Failed reading audio file", e);
 
-		int read = stream.read(buffer, 0, length);
-		if (read == -1) {
+		} finally {
 			hasFrames = false;
-			return;
-		}
-
-		int written = line.write(buffer, 0, length);
-		if (written != read) {
-			throw new IllegalStateException("Couldn't write what was available");
 		}
 	}
 
@@ -72,11 +80,13 @@ final class BufferedJavaSoundAudioPlayer implements AudioPlayer {
 
 	@Override
 	public void stop() {
+		hasFrames = false;
 		line.stop();
 	}
 
 	@Override
 	public void close() throws Exception {
+		hasFrames = false;
 		line.close();
 	}
 

@@ -39,7 +39,6 @@ final class SynchronizedPlayShowService implements PlayShowService {
 
 				long milliseconds = audioPlayer.milliseconds();
 				dmxPlayer.synchronizeMilliseconds(milliseconds);
-				audioPlayer.fillBuffer();
 
 				frameRateEngine.sleep();
 			}
