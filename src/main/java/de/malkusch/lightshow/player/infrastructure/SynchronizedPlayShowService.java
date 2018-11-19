@@ -12,13 +12,15 @@ final class SynchronizedPlayShowService implements PlayShowService {
 	private final AudioPlayerFactory audioPlayerFactory;
 	private final DmxPlayerFactory dmxPlayerFactory;
 	private final FrameRate frameRate;
+	private final Synchronizer synchronizer;
 
 	SynchronizedPlayShowService(FrameRate frameRate, AudioPlayerFactory audioPlayerFactory,
-			DmxPlayerFactory dmxPlayerFactory) {
+			DmxPlayerFactory dmxPlayerFactory, Synchronizer synchronizer) {
 
 		this.frameRate = frameRate;
 		this.audioPlayerFactory = audioPlayerFactory;
 		this.dmxPlayerFactory = dmxPlayerFactory;
+		this.synchronizer = synchronizer;
 	}
 
 	@Override
@@ -30,6 +32,7 @@ final class SynchronizedPlayShowService implements PlayShowService {
 
 			audioPlayer.startPlayback();
 			dmxPlayer.startPlayback();
+			synchronizer.start();
 			FrameRateEngine frameRateEngine = new FrameRateEngine(frameRate);
 
 			while (audioPlayer.hasFrames() || dmxPlayer.hasFrames()) {
@@ -37,8 +40,8 @@ final class SynchronizedPlayShowService implements PlayShowService {
 					throw new InterruptedException("Playback was interrupted");
 				}
 
-				long milliseconds = audioPlayer.milliseconds();
-				dmxPlayer.synchronizeMilliseconds(milliseconds);
+				long milliseconds = synchronizer.milliseconds(audioPlayer);
+				dmxPlayer.render(milliseconds);
 
 				frameRateEngine.sleep();
 			}

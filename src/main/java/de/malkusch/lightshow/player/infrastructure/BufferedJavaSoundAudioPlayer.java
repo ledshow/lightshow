@@ -58,6 +58,9 @@ final class BufferedJavaSoundAudioPlayer implements AudioPlayer {
 				int length = read;
 				int written = 0;
 				while (hasFrames && length > 0) {
+					if (Thread.interrupted()) {
+						return;
+					}
 					written = line.write(buffer, offset, length);
 					LOGGER.debug("wrote {} bytes", written);
 					offset += written;
@@ -75,7 +78,9 @@ final class BufferedJavaSoundAudioPlayer implements AudioPlayer {
 
 	@Override
 	public long milliseconds() {
-		return Math.round(line.getMicrosecondPosition() / 1000.0);
+		long us = line.getMicrosecondPosition();
+		LOGGER.debug("µs: {}", us);
+		return Math.round(us / 1000.0);
 	}
 
 	@Override

@@ -1,9 +1,8 @@
 package de.malkusch.lightshow.player.infrastructure;
 
 import ch.bildspur.artnet.ArtNetClient;
-import de.malkusch.lightshow.player.DmxBus;
 
-final class ArtnetUnicastDmxBus implements DmxBus, AutoCloseable {
+final class ArtnetUnicastDmxBus implements DmxBus {
 
 	private final String address;
 	private final ArtNetClient artnet = new ArtNetClient(null);

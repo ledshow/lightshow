@@ -1,5 +1,7 @@
 package de.malkusch.lightshow.player.infrastructure;
 
+import java.io.IOException;
+
 interface DmxPlayer {
 
 	void startPlayback();
@@ -8,6 +10,6 @@ interface DmxPlayer {
 
 	void stop();
 
-	void synchronizeMilliseconds(long milliseconds);
+	void render(long milliseconds) throws IOException;
 
 }

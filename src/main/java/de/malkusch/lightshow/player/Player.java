@@ -13,7 +13,7 @@ public final class Player {
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 		int bufferFrames = 5000;
-		FrameRate frameRate = new FrameRate(60);
+		FrameRate frameRate = new FrameRate(120);
 		InfrastructureConfiguration infrastructure = new InfrastructureConfiguration(bufferFrames, frameRate);
 		PlayShowApplicationService playShowApplicationService = new PlayShowApplicationService(
 				infrastructure.playShowService());
