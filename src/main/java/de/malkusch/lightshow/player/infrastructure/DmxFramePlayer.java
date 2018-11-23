@@ -16,6 +16,7 @@ final class DmxFramePlayer implements DmxPlayer, AutoCloseable {
 		this.universe = universe;
 		this.bus = bus;
 		this.stream = stream;
+		currentFrame = new byte[stream.channels()];
 	}
 
 	@Override
@@ -31,7 +32,7 @@ final class DmxFramePlayer implements DmxPlayer, AutoCloseable {
 	public void stop() {
 	}
 
-	private byte[] currentFrame = new byte[512];
+	private final byte[] currentFrame;
 	private long framePosition;
 
 	@Override

@@ -16,7 +16,7 @@ final class TestDmxPlayerFactory implements DmxPlayerFactory {
 
 	@Override
 	public DmxPlayer build(DmxStream dmxStream) {
-		DmxTestFrameStream testStream = new DmxTestFrameStream(frequency);
+		DmxTestFrameStream testStream = new DmxTestFrameStream(3, frequency);
 		return new DmxFramePlayer(universe, bus, testStream);
 	}
 

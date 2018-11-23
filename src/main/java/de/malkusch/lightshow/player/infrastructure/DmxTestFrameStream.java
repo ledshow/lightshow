@@ -8,11 +8,18 @@ import org.slf4j.LoggerFactory;
 final class DmxTestFrameStream implements DmxFrameStream {
 
 	private final int frameRate = 120;
+	private final int channels;
 	private final int frequency;
 	private static final Logger LOGGER = LoggerFactory.getLogger(DmxTestFrameStream.class);
 
-	DmxTestFrameStream(int frequency) {
+	DmxTestFrameStream(int channels, int frequency) {
+		this.channels = channels;
 		this.frequency = frequency;
+	}
+
+	@Override
+	public int channels() {
+		return channels;
 	}
 
 	@Override

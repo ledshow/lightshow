@@ -13,9 +13,10 @@ public final class InfrastructureConfiguration {
 	}
 
 	public PlayShowService playShowService() {
-		int testFrequency = 10;
+		int testFrequency = 20;
 		int universe = 0;
-		DmxBus bus = new ArtnetUnicastDmxBus("192.168.2.124");
+		// DmxBus bus = new ArtnetUnicastDmxBus("192.168.2.124");
+		DmxBus bus = new ArtnetUnicastDmxBus("10.0.0.60");
 		DmxPlayerFactory dmxPlayerFactory = new TestDmxPlayerFactory(testFrequency, universe, bus);
 		Synchronizer synchronizer = new NanoSynchronizer();
 		return new SynchronizedPlayShowService(frameRate, audioPlayerFactory, dmxPlayerFactory, synchronizer);

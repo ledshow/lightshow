@@ -15,7 +15,7 @@ final class ArtnetUnicastDmxBus implements DmxBus {
 	@Override
 	public void send(int universe, byte[] channels) {
 		artnet.unicastDmx(address, 0, universe, channels);
-		// artnet.broadcastDmx(0, 0, dmxData); // TODO Find a fast router
+		// artnet.broadcastDmx(0, universe, channels); // TODO Find a fast router
 	}
 
 	@Override
