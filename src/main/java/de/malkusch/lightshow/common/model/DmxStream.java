@@ -1,8 +1,8 @@
-package de.malkusch.lightshow.common.infrastructure;
+package de.malkusch.lightshow.common.model;
 
 import java.io.IOException;
 
-public interface DmxFrameStream {
+public interface DmxStream extends AutoCloseable {
 
 	int frameRate();
 

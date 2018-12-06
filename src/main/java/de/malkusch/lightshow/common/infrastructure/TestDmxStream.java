@@ -5,14 +5,16 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class DmxTestFrameStream implements DmxFrameStream {
+import de.malkusch.lightshow.common.model.DmxStream;
+
+public final class TestDmxStream implements DmxStream {
 
 	private final int frameRate = 120;
 	private final int channels;
 	private final int frequency;
-	private static final Logger LOGGER = LoggerFactory.getLogger(DmxTestFrameStream.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TestDmxStream.class);
 
-	public DmxTestFrameStream(int channels, int frequency) {
+	public TestDmxStream(int channels, int frequency) {
 		this.channels = channels;
 		this.frequency = frequency;
 	}
@@ -45,6 +47,10 @@ public final class DmxTestFrameStream implements DmxFrameStream {
 	@Override
 	public boolean hasFrames() {
 		return true;
+	}
+
+	@Override
+	public void close() {
 	}
 
 }

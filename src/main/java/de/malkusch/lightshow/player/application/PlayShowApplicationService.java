@@ -3,7 +3,6 @@ package de.malkusch.lightshow.player.application;
 import java.io.IOException;
 
 import de.malkusch.lightshow.player.model.AudioStream;
-import de.malkusch.lightshow.player.model.DmxStream;
 import de.malkusch.lightshow.player.model.PlayShowService;
 import de.malkusch.lightshow.player.model.Show;
 
@@ -17,7 +16,7 @@ public final class PlayShowApplicationService {
 
 	public void playShow(PlayShow command) throws InterruptedException, IOException {
 		AudioStream audioStream = new AudioStream(command.audioStream);
-		DmxStream dmxStream = new DmxStream(command.dmxStream);
+		var dmxStream = command.dmxStream;
 		Show show = new Show(audioStream, dmxStream);
 		player.play(show);
 	}

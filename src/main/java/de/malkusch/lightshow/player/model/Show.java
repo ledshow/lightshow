@@ -2,6 +2,8 @@ package de.malkusch.lightshow.player.model;
 
 import static java.util.Objects.requireNonNull;
 
+import de.malkusch.lightshow.common.model.DmxStream;
+
 public final class Show {
 
 	private final AudioStream audioStream;

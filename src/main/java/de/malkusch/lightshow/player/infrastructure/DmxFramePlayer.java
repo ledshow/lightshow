@@ -5,16 +5,16 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.malkusch.lightshow.common.infrastructure.DmxFrameStream;
+import de.malkusch.lightshow.common.model.DmxStream;
 
 final class DmxFramePlayer implements DmxPlayer, AutoCloseable {
 
-	private final DmxFrameStream stream;
+	private final DmxStream stream;
 	private final DmxBus bus;
 	private final int universe;
 	private static final Logger LOGGER = LoggerFactory.getLogger(DmxFramePlayer.class);
 
-	DmxFramePlayer(int universe, DmxBus bus, DmxFrameStream stream) {
+	DmxFramePlayer(int universe, DmxBus bus, DmxStream stream) {
 		this.universe = universe;
 		this.bus = bus;
 		this.stream = stream;

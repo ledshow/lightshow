@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import de.malkusch.lightshow.common.infrastructure.TestDmxStream;
 import de.malkusch.lightshow.player.application.PlayShow;
 import de.malkusch.lightshow.player.application.PlayShowApplicationService;
 import de.malkusch.lightshow.player.infrastructure.FrameRate;
@@ -12,14 +13,17 @@ import de.malkusch.lightshow.player.infrastructure.InfrastructureConfiguration;
 public final class Player {
 
 	public static void main(String[] args) throws IOException, InterruptedException {
-		int bufferFrames = 5000;
-		FrameRate frameRate = new FrameRate(120);
-		InfrastructureConfiguration infrastructure = new InfrastructureConfiguration(bufferFrames, frameRate);
-		PlayShowApplicationService playShowApplicationService = new PlayShowApplicationService(
-				infrastructure.playShowService());
+		var bufferFrames = 5000;
+		var frameRate = new FrameRate(120);
+		var infrastructure = new InfrastructureConfiguration(bufferFrames, frameRate);
+		var playShowApplicationService = new PlayShowApplicationService(infrastructure.playShowService());
+		var audio = open("/carneval.wav");
+		var frequency = 30;
+		var channel = 3;
+		var dmx = new TestDmxStream(channel, frequency);
 
-		try (InputStream audio = open("/carneval.wav"); InputStream dmx = open("/carneval.wav")) {
-			PlayShow command = new PlayShow();
+		try (audio; dmx) {
+			var command = new PlayShow();
 			command.audioStream = audio;
 			command.dmxStream = dmx;
 
