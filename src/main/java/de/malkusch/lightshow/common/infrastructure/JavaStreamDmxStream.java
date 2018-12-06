@@ -1,37 +1,49 @@
 package de.malkusch.lightshow.common.infrastructure;
 
+import static java.util.Objects.requireNonNull;
+
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.stream.Stream;
 
 import de.malkusch.lightshow.common.model.DmxStream;
+import de.malkusch.lightshow.common.model.FrameRate;
 
 public final class JavaStreamDmxStream implements DmxStream {
 
-	public JavaStreamDmxStream(Stream<byte[]> frames) {
-		// TODO Auto-generated constructor stub
+	public JavaStreamDmxStream(FrameRate rate, Stream<byte[]> frames) {
+		this.frames = requireNonNull(frames);
+		this.rate = requireNonNull(rate);
+		this.iterator = frames.iterator();
 	}
 
+	private final FrameRate rate;
+
 	@Override
-	public int frameRate() {
-		// TODO Auto-generated method stub
-		return 0;
+	public FrameRate frameRate() {
+		return rate;
 	}
+
+	private final Iterator<byte[]> iterator;
 
 	@Override
 	public void readFrame(byte[] buffer) throws IOException {
-		// TODO Auto-generated method stub
-
+		var frame = iterator.next();
+		for (int i = 0; i < buffer.length; i++) {
+			buffer[i] = i < frame.length ? frame[i] : 0;
+		}
 	}
 
 	@Override
 	public boolean hasFrames() {
-		// TODO Auto-generated method stub
-		return false;
+		return iterator.hasNext();
 	}
 
+	private final Stream<byte[]> frames;
+
 	@Override
-	public void close() throws Exception {
-		// TODO Auto-generated method stub
+	public void close() {
+		frames.close();
 	}
 
 }

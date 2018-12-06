@@ -1,16 +1,16 @@
-package de.malkusch.lightshow.player;
+package de.malkusch.lightshow;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import de.malkusch.lightshow.common.infrastructure.TestDmxStream;
+import de.malkusch.lightshow.common.model.FrameRate;
 import de.malkusch.lightshow.player.application.PlayShow;
 import de.malkusch.lightshow.player.application.PlayShowApplicationService;
-import de.malkusch.lightshow.player.infrastructure.FrameRate;
 import de.malkusch.lightshow.player.infrastructure.InfrastructureConfiguration;
 
-public final class Player {
+public final class Application {
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 		var bufferFrames = 5000;
@@ -32,7 +32,7 @@ public final class Player {
 	}
 
 	private static InputStream open(String path) {
-		return new BufferedInputStream(Player.class.getResourceAsStream(path));
+		return new BufferedInputStream(Application.class.getResourceAsStream(path));
 	}
 
 }

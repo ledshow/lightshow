@@ -3,6 +3,8 @@ package de.malkusch.lightshow.player.infrastructure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.malkusch.lightshow.common.model.FrameRate;
+
 final class FrameRateEngine {
 
 	private final FrameRate rate;

@@ -53,7 +53,7 @@ final class DmxFramePlayer implements DmxPlayer, AutoCloseable {
 	}
 
 	private long millisecondsToFrame(long milliseconds) {
-		return Math.round(milliseconds * stream.frameRate() / 1000.0);
+		return Math.round(milliseconds * stream.frameRate().framesPerSecond() / 1000.0);
 	}
 
 	@Override

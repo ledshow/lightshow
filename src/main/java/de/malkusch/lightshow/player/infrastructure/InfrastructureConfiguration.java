@@ -1,5 +1,6 @@
 package de.malkusch.lightshow.player.infrastructure;
 
+import de.malkusch.lightshow.common.model.FrameRate;
 import de.malkusch.lightshow.player.model.PlayShowService;
 
 public final class InfrastructureConfiguration {

@@ -6,10 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.malkusch.lightshow.common.model.DmxStream;
+import de.malkusch.lightshow.common.model.FrameRate;
 
 public final class TestDmxStream implements DmxStream {
 
-	private final int frameRate = 120;
+	private final FrameRate frameRate = new FrameRate(120);
 	private final int channels;
 	private final int frequency;
 	private static final Logger LOGGER = LoggerFactory.getLogger(TestDmxStream.class);
@@ -25,7 +26,7 @@ public final class TestDmxStream implements DmxStream {
 	}
 
 	@Override
-	public int frameRate() {
+	public FrameRate frameRate() {
 		return frameRate;
 	}
 
@@ -33,7 +34,7 @@ public final class TestDmxStream implements DmxStream {
 
 	@Override
 	public void readFrame(byte[] buffer) throws IOException {
-		int loopFrameCount = frameRate / frequency;
+		int loopFrameCount = frameRate.framesPerSecond() / frequency;
 		int loopPosition = (int) (position % loopFrameCount);
 		byte value = (loopPosition < loopFrameCount / 2) ? 0 : Byte.MIN_VALUE;
 		LOGGER.debug("test value: {}", value);

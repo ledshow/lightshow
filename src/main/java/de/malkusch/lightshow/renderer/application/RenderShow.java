@@ -6,6 +6,7 @@ import de.malkusch.lightshow.renderer.model.Transformation;
 
 public final class RenderShow {
 
+	public int frameRate;
 	public List<Transformation> transformations;
 
 }

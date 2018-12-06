@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public interface DmxStream extends AutoCloseable {
 
-	int frameRate();
+	FrameRate frameRate();
 
 	default int channels() {
 		return 512;

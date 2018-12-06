@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.io.IOException;
 
+import de.malkusch.lightshow.common.model.FrameRate;
 import de.malkusch.lightshow.player.model.PlayShowService;
 import de.malkusch.lightshow.player.model.Show;
 
