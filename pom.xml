@@ -13,7 +13,7 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.7.25</version>
+			<version>1.8.0-beta2</version>
 		</dependency>
 		<dependency>
 			<groupId>ch.bildspur.artnet</groupId>
@@ -40,6 +40,7 @@
 					<showWarnings>true</showWarnings>
 					<showDeprecation>true</showDeprecation>
 				</configuration>
+				<version>3.8.0</version>
 			</plugin>
 		</plugins>
 	</build>

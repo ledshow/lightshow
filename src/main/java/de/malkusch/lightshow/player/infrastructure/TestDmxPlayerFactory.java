@@ -1,5 +1,6 @@
 package de.malkusch.lightshow.player.infrastructure;
 
+import de.malkusch.lightshow.common.infrastructure.DmxTestFrameStream;
 import de.malkusch.lightshow.player.model.DmxStream;
 
 final class TestDmxPlayerFactory implements DmxPlayerFactory {

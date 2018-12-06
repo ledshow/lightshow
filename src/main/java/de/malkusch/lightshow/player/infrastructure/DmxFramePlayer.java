@@ -5,6 +5,8 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.malkusch.lightshow.common.infrastructure.DmxFrameStream;
+
 final class DmxFramePlayer implements DmxPlayer, AutoCloseable {
 
 	private final DmxFrameStream stream;

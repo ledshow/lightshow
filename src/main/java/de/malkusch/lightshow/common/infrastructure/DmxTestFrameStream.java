@@ -1,18 +1,18 @@
-package de.malkusch.lightshow.player.infrastructure;
+package de.malkusch.lightshow.common.infrastructure;
 
 import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-final class DmxTestFrameStream implements DmxFrameStream {
+public final class DmxTestFrameStream implements DmxFrameStream {
 
 	private final int frameRate = 120;
 	private final int channels;
 	private final int frequency;
 	private static final Logger LOGGER = LoggerFactory.getLogger(DmxTestFrameStream.class);
 
-	DmxTestFrameStream(int channels, int frequency) {
+	public DmxTestFrameStream(int channels, int frequency) {
 		this.channels = channels;
 		this.frequency = frequency;
 	}

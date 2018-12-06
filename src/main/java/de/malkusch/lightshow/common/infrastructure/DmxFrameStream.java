@@ -1,4 +1,4 @@
-package de.malkusch.lightshow.player.infrastructure;
+package de.malkusch.lightshow.common.infrastructure;
 
 import java.io.IOException;
 
