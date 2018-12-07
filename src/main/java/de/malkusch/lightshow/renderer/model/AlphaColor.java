@@ -15,6 +15,10 @@ public final class AlphaColor {
 		return alpha;
 	}
 
+	public AlphaColor withAlpha(int alpha) {
+		return new AlphaColor(this.color, alpha);
+	}
+
 	private final Color color;
 
 	public Color color() {

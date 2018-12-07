@@ -2,6 +2,8 @@ package de.malkusch.lightshow.renderer.model;
 
 public final class Color {
 
+	public static final Color BLACK = new Color(0, 0, 0);
+
 	public Color(int red, int green, int blue) {
 		this.red = assertByte(red);
 		this.green = assertByte(green);

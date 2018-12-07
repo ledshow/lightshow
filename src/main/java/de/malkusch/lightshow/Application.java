@@ -13,10 +13,11 @@ import de.malkusch.lightshow.player.application.PlayShowApplicationService;
 import de.malkusch.lightshow.player.infrastructure.InfrastructureConfiguration;
 import de.malkusch.lightshow.renderer.application.RenderShow;
 import de.malkusch.lightshow.renderer.application.RenderShowApplicationService;
+import de.malkusch.lightshow.renderer.infrastructure.AlphaBlendingMixService;
 import de.malkusch.lightshow.renderer.infrastructure.ListLightRepository;
-import de.malkusch.lightshow.renderer.infrastructure.NullMixService;
 import de.malkusch.lightshow.renderer.infrastructure.transformation.Strobe;
 import de.malkusch.lightshow.renderer.model.Address;
+import de.malkusch.lightshow.renderer.model.AlphaColor;
 import de.malkusch.lightshow.renderer.model.Color;
 import de.malkusch.lightshow.renderer.model.Light;
 import de.malkusch.lightshow.renderer.model.LightId;
@@ -31,18 +32,19 @@ public final class Application {
 		var infrastructure = new InfrastructureConfiguration(bufferFrames, frameRate);
 		var playShowApplicationService = new PlayShowApplicationService(infrastructure.playShowService());
 		var audio = open("file://" + args[0]);
-		var frequency = 1;
 		var center = new Light(new LightId("center"), new Address(0), new Address(1), new Address(2));
-		var mixer = new NullMixService();
+		var mixer = new AlphaBlendingMixService();
 		var lights = new ListLightRepository(asList(center));
 		var renderer = new RenderService(lights, mixer);
 		var renderShowApplicationService = new RenderShowApplicationService(renderer);
-		var white = new Color(255, 255, 255);
-		var strobe = new Strobe(center.id(), new Position(0), frameRate.duration(60, 0), frequency, white);
+		var strobe1 = new Strobe(center.id(), new Position(0), frameRate.duration(60, 0), 1,
+				new AlphaColor(new Color(100, 100, 100), 100));
+		var strobe3 = new Strobe(center.id(), new Position(0), frameRate.duration(60, 0), 8,
+				new AlphaColor(new Color(50, 50, 50), 100));
 
 		var renderShow = new RenderShow();
 		renderShow.frameRate = frameRate.framesPerSecond();
-		renderShow.transformations = asList(strobe);
+		renderShow.transformations = asList(strobe1, strobe3);
 		var dmx = renderShowApplicationService.renderShow(renderShow);
 
 		try (audio; dmx) {
