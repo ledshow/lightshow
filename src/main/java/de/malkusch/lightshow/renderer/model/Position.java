@@ -26,6 +26,14 @@ public final class Position {
 		return new Position(frame + 1);
 	}
 
+	public Position minus(Position position) {
+		requireNonNull(position);
+		if (position.frame > frame) {
+			throw new IllegalArgumentException("Invalid substraction");
+		}
+		return new Position(frame - position.frame);
+	}
+
 	@Override
 	public String toString() {
 		return Long.toString(frame);

@@ -9,11 +9,19 @@ public final class AlphaColor {
 
 	public AlphaColor(Color color, byte alpha) {
 		this.color = requireNonNull(color);
-		this.alpha = Color.toByte(alpha);
+		this.alpha = alpha;
 	}
 
 	public AlphaColor(Color color, int alpha) {
 		this(color, Color.toByte(alpha));
+	}
+
+	public byte alpha() {
+		return alpha;
+	}
+
+	public Color color() {
+		return color;
 	}
 
 	@Override

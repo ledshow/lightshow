@@ -5,9 +5,11 @@ import java.util.List;
 
 public interface LightRepository {
 
-	Light find(LightId id);
-
 	List<Light> findAll();
+
+	default Light find(LightId id) {
+		return findAll().stream().filter(it -> it.id().equals(id)).findFirst().get();
+	}
 
 	default Address maxAddress() {
 		return findAll().stream().flatMap(it -> Arrays.stream(it.addresses())).max(Address.COMPARATOR).get();

@@ -23,7 +23,7 @@ public final class RenderShowApplicationService {
 		var start = new Position(0);
 
 		var frames = Stream.iterate(start, p -> p.isWithin(start, show.end()), Position::next)
-				.map(it -> renderer.render(show, it));
+				.map(it -> renderer.render(frameRate, show, it));
 		return new JavaStreamDmxStream(frameRate, frames);
 	}
 
