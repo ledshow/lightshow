@@ -4,21 +4,18 @@ import static java.util.Objects.requireNonNull;
 
 public final class AlphaColor {
 
-	private final Color color;
-	private final byte alpha;
-
-	public AlphaColor(Color color, byte alpha) {
-		this.color = requireNonNull(color);
-		this.alpha = alpha;
-	}
-
 	public AlphaColor(Color color, int alpha) {
-		this(color, Color.toByte(alpha));
+		this.color = requireNonNull(color);
+		this.alpha = Color.assertByte(alpha);
 	}
 
-	public byte alpha() {
+	private final int alpha;
+
+	public int alpha() {
 		return alpha;
 	}
+
+	private final Color color;
 
 	public Color color() {
 		return color;

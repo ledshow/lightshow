@@ -31,9 +31,13 @@ public final class RenderService {
 		var light = lights.find(lightId);
 		var colors = show.transformations(lightId, position).map(it -> it.transform(rate, position));
 		var color = mixer.mix(colors);
-		frame[light.red().toInt()] = color.red();
-		frame[light.green().toInt()] = color.green();
-		frame[light.blue().toInt()] = color.blue();
+		frame[light.red().toInt()] = toByte(color.red());
+		frame[light.green().toInt()] = toByte(color.green());
+		frame[light.blue().toInt()] = toByte(color.blue());
+	}
+
+	private static byte toByte(int color) {
+		return (byte) (color);
 	}
 
 }

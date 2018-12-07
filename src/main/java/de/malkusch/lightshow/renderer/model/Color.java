@@ -2,38 +2,34 @@ package de.malkusch.lightshow.renderer.model;
 
 public final class Color {
 
-	public Color(byte red, byte green, byte blue) {
-		this.red = red;
-		this.green = green;
-		this.blue = blue;
-	}
-
 	public Color(int red, int green, int blue) {
-		this(toByte(red), toByte(green), toByte(blue));
+		this.red = assertByte(red);
+		this.green = assertByte(green);
+		this.blue = assertByte(blue);
 	}
 
-	static byte toByte(int value) {
+	static int assertByte(int value) {
 		if (value < 0 || value > 255) {
 			throw new IllegalArgumentException("Must be within 0 and 255");
 		}
-		return (byte) (value - 128);
+		return value;
 	}
 
-	private final byte red;
+	private final int red;
 
-	public byte red() {
+	public int red() {
 		return red;
 	}
 
-	private final byte green;
+	private final int green;
 
-	public byte green() {
+	public int green() {
 		return green;
 	}
 
-	private final byte blue;
+	private final int blue;
 
-	public byte blue() {
+	public int blue() {
 		return blue;
 	}
 
