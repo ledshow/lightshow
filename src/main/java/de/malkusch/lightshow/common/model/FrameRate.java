@@ -1,5 +1,7 @@
 package de.malkusch.lightshow.common.model;
 
+import static java.lang.Math.round;
+
 import de.malkusch.lightshow.renderer.model.Duration;
 import de.malkusch.lightshow.renderer.model.Position;
 
@@ -15,11 +17,11 @@ public final class FrameRate {
 	}
 
 	public Position position(int second, int millisecond) {
-		return new Position(fps * second + frameMilliseconds() * millisecond);
+		return new Position(fps * second + round(fps / 1000.0 * millisecond));
 	}
 
 	public Duration duration(int seconds, int milliseconds) {
-		return new Duration(fps * seconds + frameMilliseconds() * milliseconds);
+		return new Duration(fps * seconds + round(fps / 1000.0 * milliseconds));
 	}
 
 	public int framesPerSecond() {
@@ -27,7 +29,7 @@ public final class FrameRate {
 	}
 
 	public int frameMilliseconds() {
-		return (int) Math.round(1000.0 / fps);
+		return (int) round(1000.0 / fps);
 	}
 
 	@Override

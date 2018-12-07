@@ -1,5 +1,6 @@
 package de.malkusch.lightshow.renderer.infrastructure;
 
+import static de.malkusch.lightshow.renderer.model.AlphaColor.NONE;
 import static de.malkusch.lightshow.renderer.model.Color.BLACK;
 import static org.apache.commons.math3.linear.MatrixUtils.createRealVector;
 
@@ -13,11 +14,9 @@ import de.malkusch.lightshow.renderer.model.MixService;
 
 public final class AlphaBlendingMixService implements MixService {
 
-	private static final AlphaColor IDENTITY = new AlphaColor(BLACK, 0);
-
 	@Override
 	public Color mix(Stream<AlphaColor> colors) {
-		AlphaColor mixed = colors.reduce(IDENTITY, AlphaBlendingMixService::mix);
+		AlphaColor mixed = colors.reduce(NONE, AlphaBlendingMixService::mix);
 		return mix(mixed, BLACK);
 	}
 

@@ -4,6 +4,8 @@ import static java.util.Objects.requireNonNull;
 
 public final class AlphaColor {
 
+	public static final AlphaColor NONE = new AlphaColor(Color.BLACK, 0);
+
 	public AlphaColor(Color color, int alpha) {
 		this.color = requireNonNull(color);
 		this.alpha = Color.assertByte(alpha);

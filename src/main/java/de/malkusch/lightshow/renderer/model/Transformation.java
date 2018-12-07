@@ -32,6 +32,10 @@ public abstract class Transformation {
 
 	private final Duration duration;
 
+	public final Duration duration() {
+		return duration;
+	}
+
 	public final Position end() {
 		return new Position(start.frame() + duration.frames() - 1);
 	}

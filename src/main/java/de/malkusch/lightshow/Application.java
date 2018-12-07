@@ -15,7 +15,7 @@ import de.malkusch.lightshow.renderer.application.RenderShow;
 import de.malkusch.lightshow.renderer.application.RenderShowApplicationService;
 import de.malkusch.lightshow.renderer.infrastructure.AlphaBlendingMixService;
 import de.malkusch.lightshow.renderer.infrastructure.ListLightRepository;
-import de.malkusch.lightshow.renderer.infrastructure.transformation.Strobe;
+import de.malkusch.lightshow.renderer.infrastructure.transformation.Fade;
 import de.malkusch.lightshow.renderer.model.Address;
 import de.malkusch.lightshow.renderer.model.AlphaColor;
 import de.malkusch.lightshow.renderer.model.Color;
@@ -37,14 +37,14 @@ public final class Application {
 		var lights = new ListLightRepository(asList(center));
 		var renderer = new RenderService(lights, mixer);
 		var renderShowApplicationService = new RenderShowApplicationService(renderer);
-		var strobe1 = new Strobe(center.id(), new Position(0), frameRate.duration(60, 0), 1,
-				new AlphaColor(new Color(100, 100, 100), 100));
-		var strobe3 = new Strobe(center.id(), new Position(0), frameRate.duration(60, 0), 8,
-				new AlphaColor(new Color(50, 50, 50), 100));
+
+		var red = new AlphaColor(new Color(255, 0, 0), 255);
+		var redIn = Fade.fadein(center.id(), new Position(0), frameRate.duration(0, 500), red);
+		var redOut = Fade.fadeout(center.id(), redIn.end().next(), redIn.duration(), red);
 
 		var renderShow = new RenderShow();
 		renderShow.frameRate = frameRate.framesPerSecond();
-		renderShow.transformations = asList(strobe1, strobe3);
+		renderShow.transformations = asList(redIn, redOut);
 		var dmx = renderShowApplicationService.renderShow(renderShow);
 
 		try (audio; dmx) {
