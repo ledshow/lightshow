@@ -2,8 +2,10 @@ package de.malkusch.lightshow;
 
 import static java.util.Arrays.asList;
 
-import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import de.malkusch.lightshow.common.model.FrameRate;
 import de.malkusch.lightshow.player.application.PlayShow;
@@ -28,7 +30,7 @@ public final class Application {
 		var frameRate = new FrameRate(120);
 		var infrastructure = new InfrastructureConfiguration(bufferFrames, frameRate);
 		var playShowApplicationService = new PlayShowApplicationService(infrastructure.playShowService());
-		var audio = open("/carneval.wav");
+		var audio = open("file://" + args[0]);
 		var frequency = 1;
 		var center = new Light(new LightId("center"), new Address(0), new Address(1), new Address(2));
 		var mixer = new NullMixService();
@@ -36,7 +38,7 @@ public final class Application {
 		var renderer = new RenderService(lights, mixer);
 		var renderShowApplicationService = new RenderShowApplicationService(renderer);
 		var white = new Color(255, 255, 255);
-		var strobe = new Strobe(center.id(), new Position(0), frameRate.position(60, 0), frequency, white);
+		var strobe = new Strobe(center.id(), new Position(0), frameRate.duration(60, 0), frequency, white);
 
 		var renderShow = new RenderShow();
 		renderShow.frameRate = frameRate.framesPerSecond();
@@ -52,8 +54,8 @@ public final class Application {
 		}
 	}
 
-	private static InputStream open(String path) {
-		return new BufferedInputStream(Application.class.getResourceAsStream(path));
+	private static InputStream open(String path) throws MalformedURLException, IOException {
+		return new URL(path).openStream();
 	}
 
 }

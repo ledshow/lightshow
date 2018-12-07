@@ -6,13 +6,10 @@ import de.malkusch.lightshow.common.model.FrameRate;
 
 public abstract class Transformation {
 
-	protected Transformation(LightId lightId, Position start, Position end) {
+	protected Transformation(LightId lightId, Position start, Duration duration) {
 		this.lightId = requireNonNull(lightId);
 		this.start = requireNonNull(start);
-		this.end = requireNonNull(end);
-		if (!end.isAfter(start)) {
-			throw new IllegalArgumentException("End must be after start");
-		}
+		this.duration = requireNonNull(duration);
 	}
 
 	private final LightId lightId;
@@ -33,14 +30,14 @@ public abstract class Transformation {
 		return position.minus(start);
 	}
 
-	private final Position end;
+	private final Duration duration;
 
 	public final Position end() {
-		return end;
+		return new Position(start.frame() + duration.frames() - 1);
 	}
 
 	public final boolean isActive(Position position) {
-		return position.isWithin(start, end);
+		return position.isWithin(start, end());
 	}
 
 }

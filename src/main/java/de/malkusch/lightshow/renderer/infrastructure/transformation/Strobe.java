@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 import de.malkusch.lightshow.common.model.FrameRate;
 import de.malkusch.lightshow.renderer.model.AlphaColor;
 import de.malkusch.lightshow.renderer.model.Color;
+import de.malkusch.lightshow.renderer.model.Duration;
 import de.malkusch.lightshow.renderer.model.LightId;
 import de.malkusch.lightshow.renderer.model.Position;
 import de.malkusch.lightshow.renderer.model.Transformation;
@@ -14,8 +15,8 @@ public final class Strobe extends Transformation {
 	private final int frequency;
 	private final Color color;
 
-	public Strobe(LightId lightId, Position start, Position end, int frequency, Color color) {
-		super(lightId, start, end);
+	public Strobe(LightId lightId, Position start, Duration duration, int frequency, Color color) {
+		super(lightId, start, duration);
 		this.frequency = assertValidFrequency(frequency);
 		this.color = requireNonNull(color);
 	}

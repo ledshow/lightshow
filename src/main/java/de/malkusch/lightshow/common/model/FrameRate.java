@@ -1,5 +1,6 @@
 package de.malkusch.lightshow.common.model;
 
+import de.malkusch.lightshow.renderer.model.Duration;
 import de.malkusch.lightshow.renderer.model.Position;
 
 public final class FrameRate {
@@ -15,6 +16,10 @@ public final class FrameRate {
 
 	public Position position(int second, int millisecond) {
 		return new Position(fps * second + frameMilliseconds() * millisecond);
+	}
+
+	public Duration duration(int seconds, int milliseconds) {
+		return new Duration(fps * seconds + frameMilliseconds() * milliseconds);
 	}
 
 	public int framesPerSecond() {
