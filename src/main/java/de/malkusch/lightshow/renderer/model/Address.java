@@ -18,6 +18,10 @@ public final class Address {
 		this.value = address;
 	}
 
+	public Address next() {
+		return new Address(value + 1);
+	}
+
 	public int toInt() {
 		return value;
 	}

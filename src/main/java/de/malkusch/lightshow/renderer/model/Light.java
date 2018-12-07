@@ -4,6 +4,10 @@ import static java.util.Objects.requireNonNull;
 
 public final class Light {
 
+	public Light(LightId id, Address red) {
+		this(id, red, red.next(), red.next().next());
+	}
+
 	public Light(LightId id, Address red, Address green, Address blue) {
 		this.id = requireNonNull(id);
 		this.red = requireNonNull(red);

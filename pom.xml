@@ -19,8 +19,6 @@
 			<groupId>ch.bildspur.artnet</groupId>
 			<artifactId>artnet</artifactId>
 			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/src/main/resources/libs/artnet4j.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
@@ -46,6 +44,21 @@
 					<showDeprecation>true</showDeprecation>
 				</configuration>
 				<version>3.8.0</version>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.6.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>java</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<mainClass>de.malkusch.lightshow.Application</mainClass>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

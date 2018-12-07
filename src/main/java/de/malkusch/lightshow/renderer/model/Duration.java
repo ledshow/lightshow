@@ -1,5 +1,7 @@
 package de.malkusch.lightshow.renderer.model;
 
+import static java.util.Objects.requireNonNull;
+
 public final class Duration {
 
 	private final long frames;
@@ -9,6 +11,17 @@ public final class Duration {
 			throw new IllegalArgumentException("Duration must be positive");
 		}
 		this.frames = frames;
+	}
+
+	public Duration add(Duration duration) {
+		return new Duration(requireNonNull(duration).frames + frames);
+	}
+
+	public Duration dividedBy(int divisor) {
+		if (divisor <= 0) {
+			throw new IllegalArgumentException("Divisor must be positive");
+		}
+		return new Duration(Math.round(frames / (double) divisor));
 	}
 
 	public long frames() {

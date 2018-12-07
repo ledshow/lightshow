@@ -21,11 +21,25 @@ public final class Fade extends Transformation {
 		this.to = requireNonNull(to);
 	}
 
-	public static Fade fadein(LightId lightId, Position start, Duration duration, AlphaColor color) {
+	public static Transformation blink(LightId lightId, Position start, AlphaColor color, Duration fadeIn,
+			Duration fadeOut) {
+
+		var in = fadein(lightId, start, fadeIn, color);
+		var out = fadeout(lightId, in.end().next(), fadeOut, color);
+		return new Composition(in, out);
+	}
+
+	public static Transformation blink(LightId lightId, Position start, AlphaColor color, Duration duration) {
+		var fadeIn = duration.dividedBy(2);
+		var fadeOut = new Duration(duration.frames() - fadeIn.frames());
+		return blink(lightId, start, color, fadeIn, fadeOut);
+	}
+
+	public static Transformation fadein(LightId lightId, Position start, Duration duration, AlphaColor color) {
 		return new Fade(lightId, start, duration, color.withAlpha(0), color);
 	}
 
-	public static Fade fadeout(LightId lightId, Position start, Duration duration, AlphaColor color) {
+	public static Transformation fadeout(LightId lightId, Position start, Duration duration, AlphaColor color) {
 		return new Fade(lightId, start, duration, color, color.withAlpha(0));
 	}
 

@@ -32,19 +32,28 @@ public final class Application {
 		var infrastructure = new InfrastructureConfiguration(bufferFrames, frameRate);
 		var playShowApplicationService = new PlayShowApplicationService(infrastructure.playShowService());
 		var audio = open("file://" + args[0]);
-		var center = new Light(new LightId("center"), new Address(0), new Address(1), new Address(2));
+
+		var leftCenter = new Light(new LightId("leftCenter"), new Address(0));
+		var leftFront = new Light(new LightId("leftFront"), new Address(3));
+		var frontLeft = new Light(new LightId("frontLeft"), new Address(6));
+		var frontCenter = new Light(new LightId("frontCenter"), new Address(9));
+		var frontRight = new Light(new LightId("frontRight"), new Address(12));
+		var rightFront = new Light(new LightId("rightFront"), new Address(15));
+		var rightCenter = new Light(new LightId("rightCenter"), new Address(18));
+
 		var mixer = new AlphaBlendingMixService();
-		var lights = new ListLightRepository(asList(center));
+		var lights = new ListLightRepository(
+				asList(leftCenter, leftFront, frontLeft, frontCenter, frontRight, rightFront, rightCenter));
 		var renderer = new RenderService(lights, mixer);
 		var renderShowApplicationService = new RenderShowApplicationService(renderer);
 
 		var red = new AlphaColor(new Color(255, 0, 0), 255);
-		var redIn = Fade.fadein(center.id(), new Position(0), frameRate.duration(0, 500), red);
-		var redOut = Fade.fadeout(center.id(), redIn.end().next(), redIn.duration(), red);
 
 		var renderShow = new RenderShow();
 		renderShow.frameRate = frameRate.framesPerSecond();
-		renderShow.transformations = asList(redIn, redOut);
+		renderShow.transformations = asList(
+				Fade.blink(leftCenter.id(), new Position(0), red, frameRate.duration(2, 0)),
+				Fade.blink(leftFront.id(), frameRate.position(1, 0), red, frameRate.duration(2, 0)));
 		var dmx = renderShowApplicationService.renderShow(renderShow);
 
 		try (audio; dmx) {
