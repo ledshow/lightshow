@@ -14,22 +14,8 @@ import de.malkusch.lightshow.renderer.model.Transformation;
 
 public final class Fade extends Transformation {
 
-	public Fade(LightId lightId, Position start, Duration duration, AlphaColor from, AlphaColor to) {
-		super(lightId, start, duration);
-
-		this.from = requireNonNull(from);
-		this.to = requireNonNull(to);
-	}
-
-	@Override
-	public Transformation with(LightId lightId) {
-		return new Fade(lightId, start(), duration(), from, to);
-	}
-
-	@Override
-	public Transformation with(Position start) {
-		return new Fade(lightId(), start, duration(), from, to);
-	}
+	private final Transformation from;
+	private final Transformation to;
 
 	public static Transformation blink(LightId lightId, Position start, AlphaColor color, Duration fadeIn,
 			Duration fadeOut) {
@@ -46,15 +32,33 @@ public final class Fade extends Transformation {
 	}
 
 	public static Transformation fadein(LightId lightId, Position start, Duration duration, AlphaColor color) {
-		return new Fade(lightId, start, duration, color.withAlpha(0), color);
+		var from = new Plain(lightId, start, duration, color.withAlpha(0));
+		var to = new Plain(lightId, start, duration, color);
+		return new Fade(lightId, start, duration, from, to);
 	}
 
 	public static Transformation fadeout(LightId lightId, Position start, Duration duration, AlphaColor color) {
-		return new Fade(lightId, start, duration, color, color.withAlpha(0));
+		var from = new Plain(lightId, start, duration, color);
+		var to = new Plain(lightId, start, duration, color.withAlpha(0));
+		return new Fade(lightId, start, duration, from, to);
 	}
 
-	private final AlphaColor from;
-	private final AlphaColor to;
+	public Fade(LightId lightId, Position start, Duration duration, Transformation from, Transformation to) {
+		super(lightId, start, duration);
+
+		this.from = requireNonNull(from);
+		this.to = requireNonNull(to);
+	}
+
+	@Override
+	public Transformation with(LightId lightId) {
+		return new Fade(lightId, start(), duration(), from, to);
+	}
+
+	@Override
+	public Transformation with(Position start) {
+		return new Fade(lightId(), start, duration(), from, to);
+	}
 
 	@Override
 	public AlphaColor transform(FrameRate rate, Position position) {
@@ -66,10 +70,12 @@ public final class Fade extends Transformation {
 	}
 
 	private int transform(FrameRate rate, Position position, Function<AlphaColor, Integer> channel) {
+		var fromColor = from.transform(rate, position);
+		var toColor = to.transform(rate, position);
 		var relativePosition = relativePosition(position);
 		var progress = (relativePosition.frame() + 1) / (double) duration().frames();
-		var difference = channel.apply(to) - channel.apply(from);
-		return channel.apply(from) + (int) (smoothProgress(progress) * difference);
+		var difference = channel.apply(toColor) - channel.apply(fromColor);
+		return channel.apply(fromColor) + (int) (smoothProgress(progress) * difference);
 	}
 
 	private static double smoothProgress(double progress) {
