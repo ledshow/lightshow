@@ -20,6 +20,20 @@ public final class Composition extends Transformation {
 		this.transformations = transformations;
 	}
 
+	@Override
+	public Transformation with(LightId lightId) {
+		var withLightId = stream(transformations).map(it -> it.with(lightId)).toArray(Transformation[]::new);
+		return new Composition(withLightId);
+	}
+
+	@Override
+	public Transformation with(Position start) {
+		var delta = start.frame() - start().frame();
+		var withStart = stream(transformations).map(it -> it.with(it.start().shift(delta)))
+				.toArray(Transformation[]::new);
+		return new Composition(withStart);
+	}
+
 	private static LightId assertSameLightId(Transformation[] transformations) {
 		var count = stream(transformations).map(Transformation::lightId).distinct().count();
 		if (count != 1) {

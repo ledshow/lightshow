@@ -21,6 +21,16 @@ public final class Fade extends Transformation {
 		this.to = requireNonNull(to);
 	}
 
+	@Override
+	public Transformation with(LightId lightId) {
+		return new Fade(lightId, start(), duration(), from, to);
+	}
+
+	@Override
+	public Transformation with(Position start) {
+		return new Fade(lightId(), start, duration(), from, to);
+	}
+
 	public static Transformation blink(LightId lightId, Position start, AlphaColor color, Duration fadeIn,
 			Duration fadeOut) {
 

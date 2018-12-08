@@ -30,7 +30,7 @@ public final class Duration {
 
 	@Override
 	public String toString() {
-		return Long.toString(frames);
+		return String.format("%d frames", frames);
 	}
 
 	@Override

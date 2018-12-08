@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
 import de.malkusch.lightshow.common.model.FrameRate;
 import de.malkusch.lightshow.player.application.PlayShow;
@@ -16,6 +19,7 @@ import de.malkusch.lightshow.renderer.application.RenderShowApplicationService;
 import de.malkusch.lightshow.renderer.infrastructure.AlphaBlendingMixService;
 import de.malkusch.lightshow.renderer.infrastructure.ListLightRepository;
 import de.malkusch.lightshow.renderer.infrastructure.transformation.Fade;
+import de.malkusch.lightshow.renderer.infrastructure.transformation.RunnerFactory;
 import de.malkusch.lightshow.renderer.model.Address;
 import de.malkusch.lightshow.renderer.model.AlphaColor;
 import de.malkusch.lightshow.renderer.model.Color;
@@ -40,10 +44,17 @@ public final class Application {
 		var frontRight = new Light(new LightId("frontRight"), new Address(12));
 		var rightFront = new Light(new LightId("rightFront"), new Address(15));
 		var rightCenter = new Light(new LightId("rightCenter"), new Address(18));
-
-		var mixer = new AlphaBlendingMixService();
 		var lights = new ListLightRepository(
 				asList(leftCenter, leftFront, frontLeft, frontCenter, frontRight, rightFront, rightCenter));
+		var lightIds = lights.findAll().stream().map(Light::id).collect(Collectors.toList());
+
+		var leftToRight = new RunnerFactory(lightIds);
+		var reversedIds = new ArrayList<>(lightIds);
+		Collections.reverse(reversedIds);
+		var rightToLeft = new RunnerFactory(reversedIds);
+
+		var mixer = new AlphaBlendingMixService();
+
 		var renderer = new RenderService(lights, mixer);
 		var renderShowApplicationService = new RenderShowApplicationService(renderer);
 
@@ -51,9 +62,9 @@ public final class Application {
 
 		var renderShow = new RenderShow();
 		renderShow.frameRate = frameRate.framesPerSecond();
-		renderShow.transformations = asList(
-				Fade.blink(leftCenter.id(), new Position(0), red, frameRate.duration(2, 0)),
-				Fade.blink(leftFront.id(), frameRate.position(1, 0), red, frameRate.duration(2, 0)));
+		renderShow.transformations = new ArrayList<>();
+		renderShow.transformations.addAll(leftToRight.runner(
+				Fade.blink(leftCenter.id(), new Position(0), red, frameRate.duration(2, 0)), frameRate.position(1, 0)));
 		var dmx = renderShowApplicationService.renderShow(renderShow);
 
 		try (audio; dmx) {

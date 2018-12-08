@@ -18,6 +18,10 @@ public abstract class Transformation {
 		return lightId;
 	}
 
+	abstract public Transformation with(LightId lightId);
+
+	abstract public Transformation with(Position start);
+
 	abstract public AlphaColor transform(FrameRate rate, Position position);
 
 	private final Position start;
@@ -42,6 +46,11 @@ public abstract class Transformation {
 
 	public final boolean isActive(Position position) {
 		return position.isWithin(start, end());
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%s(%s, %s, %s)", getClass().getSimpleName(), lightId, start, duration);
 	}
 
 }

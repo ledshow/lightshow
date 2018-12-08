@@ -28,6 +28,16 @@ public final class Strobe extends Transformation {
 	}
 
 	@Override
+	public Transformation with(LightId lightId) {
+		return new Strobe(lightId, start(), duration(), frequency, color);
+	}
+
+	@Override
+	public Transformation with(Position start) {
+		return new Strobe(lightId(), start, duration(), frequency, color);
+	}
+
+	@Override
 	public AlphaColor transform(FrameRate rate, Position position) {
 		var relativePosition = relativePosition(position).frame();
 		var period = rate.framesPerSecond() / frequency;

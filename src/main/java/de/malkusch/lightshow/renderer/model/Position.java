@@ -34,9 +34,13 @@ public final class Position {
 		return new Position(frame - position.frame);
 	}
 
+	public Position shift(long frames) {
+		return new Position(frame + frames);
+	}
+
 	@Override
 	public String toString() {
-		return Long.toString(frame);
+		return String.format("@%d", frame);
 	}
 
 	@Override
