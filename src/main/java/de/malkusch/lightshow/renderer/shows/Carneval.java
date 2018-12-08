@@ -53,7 +53,7 @@ public final class Carneval {
 	}
 
 	public List<Transformation> load(FrameRate frameRate) {
-		var highPianoColor = green.withAlpha(80);
+		var highPianoColor = new AlphaColor(new Color(100, 100, 255), 255).withAlpha(80);
 		var highPianoBlink = Fade.blink(leftCenter.id(), new Position(0), highPianoColor, frameRate.duration(0, 100),
 				frameRate.duration(0, 200));
 
@@ -67,9 +67,9 @@ public final class Carneval {
 			transformations.addAll(Sequence.from(seq1, seq2).transformations());
 		}
 
-		var highLoudPianoColor = highPianoColor.withAlpha(200);
+		var highLoudPianoColor = highPianoColor.withAlpha(255);
 		var loudPianoBlink = Fade.blink(leftCenter.id(), frameRate.position(24, 800), highLoudPianoColor,
-				frameRate.duration(0, 150), frameRate.duration(0, 200));
+				frameRate.duration(0, 150), frameRate.duration(0, 450));
 		transformations.addAll(allLights.grouped(loudPianoBlink).transformations());
 
 		var stringColor = red.withAlpha(150);
@@ -80,9 +80,9 @@ public final class Carneval {
 
 		transformations.addAll(string1.withStart(frameRate.position(6, 0)).transformations());
 		transformations.addAll(string2.withStart(frameRate.position(8, 500)).transformations());
-		transformations.addAll(string1.withStart(frameRate.position(10, 500)).transformations());
-		transformations.addAll(string2.withStart(frameRate.position(13, 000)).transformations());
-		transformations.addAll(string1.withStart(frameRate.position(15, 500)).transformations());
+		transformations.addAll(string1.withStart(frameRate.position(10, 800)).transformations());
+		transformations.addAll(string2.withStart(frameRate.position(13, 200)).transformations());
+		transformations.addAll(string1.withStart(frameRate.position(15, 800)).transformations());
 
 		var string1Short = rightToLeft.runner(Fade.blink(leftCenter.id(), frameRate.position(6, 0), stringColor,
 				frameRate.duration(0, 100), frameRate.duration(1, 0)), frameRate.duration(0, 250));
@@ -90,7 +90,7 @@ public final class Carneval {
 		var string2Short = leftToRight.runner(Fade.blink(leftCenter.id(), frameRate.position(6, 0), stringColor,
 				frameRate.duration(0, 100), frameRate.duration(1, 0)), frameRate.duration(0, 250));
 
-		transformations.addAll(string1Short.withStart(frameRate.position(17, 500)).transformations());
+		transformations.addAll(string1Short.withStart(frameRate.position(17, 900)).transformations());
 		transformations.addAll(string2Short.withStart(frameRate.position(18, 700)).transformations());
 		transformations.addAll(string1Short.withStart(frameRate.position(19, 700)).transformations());
 		transformations.addAll(string2Short.withStart(frameRate.position(20, 750)).transformations());
