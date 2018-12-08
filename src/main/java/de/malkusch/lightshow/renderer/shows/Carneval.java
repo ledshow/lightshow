@@ -53,7 +53,7 @@ public final class Carneval {
 	}
 
 	public List<Transformation> load(FrameRate frameRate) {
-		var highPianoColor = new AlphaColor(new Color(100, 100, 255), 255).withAlpha(80);
+		var highPianoColor = new AlphaColor(new Color(0, 100, 255), 80);
 		var highPianoBlink = Fade.blink(leftCenter.id(), new Position(0), highPianoColor, frameRate.duration(0, 100),
 				frameRate.duration(0, 200));
 
