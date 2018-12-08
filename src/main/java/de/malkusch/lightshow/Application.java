@@ -59,12 +59,21 @@ public final class Application {
 		var renderShowApplicationService = new RenderShowApplicationService(renderer);
 
 		var red = new AlphaColor(new Color(255, 0, 0), 255);
+		var green = new AlphaColor(new Color(0, 255, 0), 255);
 
 		var renderShow = new RenderShow();
 		renderShow.frameRate = frameRate.framesPerSecond();
 		renderShow.transformations = new ArrayList<>();
-		renderShow.transformations.addAll(leftToRight.runner(
-				Fade.blink(leftCenter.id(), new Position(0), red, frameRate.duration(2, 0)), frameRate.position(1, 0)));
+
+		var redBlink = Fade.blink(leftCenter.id(), new Position(0), red, frameRate.duration(0, 500),
+				frameRate.duration(2, 0));
+
+		var greenBlink = Fade.blink(leftCenter.id(), new Position(0), green, frameRate.duration(0, 500),
+				frameRate.duration(2, 0));
+
+		renderShow.transformations.addAll(leftToRight.runner(redBlink, frameRate.position(2, 0)));
+		renderShow.transformations
+				.addAll(leftToRight.runner(greenBlink.with(frameRate.position(1, 0)), frameRate.position(3, 0)));
 		var dmx = renderShowApplicationService.renderShow(renderShow);
 
 		try (audio; dmx) {

@@ -28,7 +28,7 @@ public final class AlphaBlendingMixService implements MixService {
 		return color(c);
 	}
 
-	private static AlphaColor mix(AlphaColor colorA, AlphaColor colorB) {
+	private static AlphaColor mix(AlphaColor colorB, AlphaColor colorA) {
 		var alphaA = real(colorA.alpha());
 		var alphaB = real(colorB.alpha());
 		var a = vector(colorA.color());
