@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import de.malkusch.lightshow.common.model.FrameRate;
 import de.malkusch.lightshow.player.model.PlayShowService;
+import de.malkusch.lightshow.player.model.Second;
 import de.malkusch.lightshow.player.model.Show;
 
 final class SynchronizedPlayShowService implements PlayShowService {
@@ -25,15 +26,15 @@ final class SynchronizedPlayShowService implements PlayShowService {
 	}
 
 	@Override
-	public void play(Show show) throws InterruptedException, IOException {
+	public void play(Show show, Second start) throws InterruptedException, IOException {
 		requireNonNull(show);
 
 		try (AudioPlayer audioPlayer = audioPlayerFactory.build(show.audioStream())) {
 			DmxPlayer dmxPlayer = dmxPlayerFactory.build(show.dmxStream());
 
-			audioPlayer.startPlayback();
-			dmxPlayer.startPlayback();
-			synchronizer.start();
+			audioPlayer.startPlayback(start);
+			dmxPlayer.startPlayback(start);
+			synchronizer.start(start);
 			FrameRateEngine frameRateEngine = new FrameRateEngine(frameRate);
 
 			while (audioPlayer.hasFrames() || dmxPlayer.hasFrames()) {

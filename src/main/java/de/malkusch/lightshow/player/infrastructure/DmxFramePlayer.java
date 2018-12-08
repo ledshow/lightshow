@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.malkusch.lightshow.common.model.DmxStream;
+import de.malkusch.lightshow.player.model.Second;
 
 final class DmxFramePlayer implements DmxPlayer, AutoCloseable {
 
@@ -22,7 +23,7 @@ final class DmxFramePlayer implements DmxPlayer, AutoCloseable {
 	}
 
 	@Override
-	public void startPlayback() {
+	public void startPlayback(Second second) {
 	}
 
 	@Override

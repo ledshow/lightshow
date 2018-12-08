@@ -4,6 +4,6 @@ import java.io.IOException;
 
 public interface PlayShowService {
 
-	void play(Show show) throws InterruptedException, IOException;
+	void play(Show show, Second start) throws InterruptedException, IOException;
 
 }

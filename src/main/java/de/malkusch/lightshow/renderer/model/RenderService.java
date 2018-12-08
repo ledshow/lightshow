@@ -3,6 +3,7 @@ package de.malkusch.lightshow.renderer.model;
 import static java.util.Objects.requireNonNull;
 
 import de.malkusch.lightshow.common.model.FrameRate;
+import de.malkusch.lightshow.common.model.Position;
 
 public final class RenderService {
 

@@ -8,8 +8,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import de.malkusch.lightshow.renderer.model.Duration;
-import de.malkusch.lightshow.renderer.model.Position;
+import de.malkusch.lightshow.common.model.Duration;
+import de.malkusch.lightshow.common.model.Position;
 import de.malkusch.lightshow.renderer.model.Transformation;
 
 public final class Sequence {

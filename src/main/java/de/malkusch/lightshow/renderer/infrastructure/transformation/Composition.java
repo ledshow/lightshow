@@ -4,11 +4,11 @@ import static java.util.Arrays.stream;
 
 import java.util.Arrays;
 
+import de.malkusch.lightshow.common.model.Duration;
 import de.malkusch.lightshow.common.model.FrameRate;
+import de.malkusch.lightshow.common.model.Position;
 import de.malkusch.lightshow.renderer.model.AlphaColor;
-import de.malkusch.lightshow.renderer.model.Duration;
 import de.malkusch.lightshow.renderer.model.LightId;
-import de.malkusch.lightshow.renderer.model.Position;
 import de.malkusch.lightshow.renderer.model.Transformation;
 
 public final class Composition extends Transformation {

@@ -8,5 +8,6 @@ public final class PlayShow {
 
 	public InputStream audioStream;
 	public DmxStream dmxStream;
+	public int start = 0;
 
 }

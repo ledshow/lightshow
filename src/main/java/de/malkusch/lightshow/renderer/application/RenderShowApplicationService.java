@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 import de.malkusch.lightshow.common.infrastructure.JavaStreamDmxStream;
 import de.malkusch.lightshow.common.model.DmxStream;
 import de.malkusch.lightshow.common.model.FrameRate;
-import de.malkusch.lightshow.renderer.model.Position;
+import de.malkusch.lightshow.common.model.Position;
 import de.malkusch.lightshow.renderer.model.RenderService;
 import de.malkusch.lightshow.renderer.model.Show;
 

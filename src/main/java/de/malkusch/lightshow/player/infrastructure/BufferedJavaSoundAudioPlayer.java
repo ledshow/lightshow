@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.malkusch.lightshow.player.model.AudioStream;
+import de.malkusch.lightshow.player.model.Second;
 
 final class BufferedJavaSoundAudioPlayer implements AudioPlayer {
 
@@ -36,9 +37,16 @@ final class BufferedJavaSoundAudioPlayer implements AudioPlayer {
 	}
 
 	@Override
-	public void startPlayback() {
+	public void startPlayback(Second second) throws IOException {
+		skip(second);
 		line.start();
 		reader.start();
+	}
+
+	private void skip(Second second) throws IOException {
+		var frames = Math.round(stream.getFormat().getFrameRate() * second.toInt());
+		var bytes = stream.getFormat().getFrameSize() * frames;
+		stream.skip(bytes);
 	}
 
 	private volatile boolean hasFrames = true;

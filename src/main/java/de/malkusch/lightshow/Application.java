@@ -12,6 +12,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import de.malkusch.lightshow.common.model.FrameRate;
+import de.malkusch.lightshow.common.model.Position;
 import de.malkusch.lightshow.player.application.PlayShow;
 import de.malkusch.lightshow.player.application.PlayShowApplicationService;
 import de.malkusch.lightshow.player.infrastructure.InfrastructureConfiguration;
@@ -28,7 +29,6 @@ import de.malkusch.lightshow.renderer.model.AlphaColor;
 import de.malkusch.lightshow.renderer.model.Color;
 import de.malkusch.lightshow.renderer.model.Light;
 import de.malkusch.lightshow.renderer.model.LightId;
-import de.malkusch.lightshow.renderer.model.Position;
 import de.malkusch.lightshow.renderer.model.RenderService;
 
 public final class Application {
@@ -88,12 +88,25 @@ public final class Application {
 				frameRate.duration(0, 150), frameRate.duration(0, 200));
 		renderShow.transformations.addAll(allLights.grouped(loudPianoBlink).transformations());
 
+		var stringColor = red.withAlpha(150);
+		var string1 = leftToRight.runner(Fade.blink(leftCenter.id(), frameRate.position(6, 0), stringColor,
+				frameRate.duration(0, 100), frameRate.duration(1, 0)), frameRate.duration(0, 500));
+		var string2 = rightToLeft.runner(Fade.blink(leftCenter.id(), frameRate.position(8, 500), stringColor,
+				frameRate.duration(0, 100), frameRate.duration(1, 0)), frameRate.duration(0, 500));
+
+		renderShow.transformations.addAll(string1.withStart(frameRate.position(6, 0)).transformations());
+		renderShow.transformations.addAll(string2.withStart(frameRate.position(8, 500)).transformations());
+		renderShow.transformations.addAll(string1.withStart(frameRate.position(10, 500)).transformations());
+		renderShow.transformations.addAll(string2.withStart(frameRate.position(13, 000)).transformations());
+		renderShow.transformations.addAll(string1.withStart(frameRate.position(15, 500)).transformations());
+
 		var dmx = renderShowApplicationService.renderShow(renderShow);
 
 		try (audio; dmx) {
 			var command = new PlayShow();
 			command.audioStream = audio;
 			command.dmxStream = dmx;
+			command.start = 22;
 
 			playShowApplicationService.playShow(command);
 		}

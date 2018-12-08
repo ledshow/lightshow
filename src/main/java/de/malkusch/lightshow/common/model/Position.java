@@ -1,4 +1,4 @@
-package de.malkusch.lightshow.renderer.model;
+package de.malkusch.lightshow.common.model;
 
 import static java.util.Objects.requireNonNull;
 

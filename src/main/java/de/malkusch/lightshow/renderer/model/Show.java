@@ -7,6 +7,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
+import de.malkusch.lightshow.common.model.Position;
+
 public final class Show {
 
 	public Show(List<Transformation> transformations) {

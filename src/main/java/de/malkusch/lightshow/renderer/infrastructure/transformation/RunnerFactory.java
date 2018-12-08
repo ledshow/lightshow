@@ -5,9 +5,9 @@ import static java.util.Objects.requireNonNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.malkusch.lightshow.renderer.model.Duration;
+import de.malkusch.lightshow.common.model.Duration;
+import de.malkusch.lightshow.common.model.Position;
 import de.malkusch.lightshow.renderer.model.LightId;
-import de.malkusch.lightshow.renderer.model.Position;
 import de.malkusch.lightshow.renderer.model.Transformation;
 
 public final class RunnerFactory {

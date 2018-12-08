@@ -2,7 +2,9 @@ package de.malkusch.lightshow.renderer.model;
 
 import static java.util.Objects.requireNonNull;
 
+import de.malkusch.lightshow.common.model.Duration;
 import de.malkusch.lightshow.common.model.FrameRate;
+import de.malkusch.lightshow.common.model.Position;
 
 public abstract class Transformation {
 
