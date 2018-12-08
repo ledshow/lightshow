@@ -47,7 +47,7 @@ public final class Composition extends Transformation {
 	}
 
 	private static Position start(Transformation[] transformations) {
-		return stream(transformations).map(t -> t.start().frame()).min(Long::compare).map(Position::new).get();
+		return stream(transformations).map(Transformation::start).min(Position::compareTo).get();
 	}
 
 	@Override

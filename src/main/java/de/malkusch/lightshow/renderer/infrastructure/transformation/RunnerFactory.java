@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.malkusch.lightshow.renderer.model.Duration;
 import de.malkusch.lightshow.renderer.model.LightId;
 import de.malkusch.lightshow.renderer.model.Position;
 import de.malkusch.lightshow.renderer.model.Transformation;
@@ -20,8 +21,8 @@ public final class RunnerFactory {
 		this.lightIds = lightIds;
 	}
 
-	public List<Transformation> runner(Transformation first, Position last) {
-		var step = Math.round((last.frame() - first.start().frame()) / (double) lightIds.size());
+	public Sequence runner(Transformation first, Duration duration) {
+		var step = Math.round(duration.frames() / (double) lightIds.size());
 		List<Transformation> runner = new ArrayList<>(lightIds.size());
 		for (int i = 0; i < lightIds.size(); i++) {
 			var position = new Position(first.start().frame() + i * step);
@@ -29,7 +30,11 @@ public final class RunnerFactory {
 			var shifted = first.with(position).with(lightId);
 			runner.add(shifted);
 		}
-		return runner;
+		return new Sequence(runner);
+	}
+
+	public Sequence runner(Transformation first, Position last) {
+		return runner(first, new Duration(last.frame() - first.start().frame()));
 	}
 
 }

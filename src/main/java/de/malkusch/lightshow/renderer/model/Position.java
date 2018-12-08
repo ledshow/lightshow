@@ -2,7 +2,7 @@ package de.malkusch.lightshow.renderer.model;
 
 import static java.util.Objects.requireNonNull;
 
-public final class Position {
+public final class Position implements Comparable<Position> {
 
 	private final long frame;
 
@@ -38,6 +38,10 @@ public final class Position {
 		return new Position(frame + frames);
 	}
 
+	public Position shift(Duration duration) {
+		return shift(duration.frames());
+	}
+
 	@Override
 	public String toString() {
 		return String.format("@%d", frame);
@@ -64,6 +68,11 @@ public final class Position {
 			throw new IllegalArgumentException("End must be after start");
 		}
 		return frame >= start.frame && frame <= end.frame;
+	}
+
+	@Override
+	public int compareTo(Position other) {
+		return Long.compare(frame, other.frame);
 	}
 
 }

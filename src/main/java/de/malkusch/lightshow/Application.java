@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import de.malkusch.lightshow.common.model.FrameRate;
@@ -19,7 +20,9 @@ import de.malkusch.lightshow.renderer.application.RenderShowApplicationService;
 import de.malkusch.lightshow.renderer.infrastructure.AlphaBlendingMixService;
 import de.malkusch.lightshow.renderer.infrastructure.ListLightRepository;
 import de.malkusch.lightshow.renderer.infrastructure.transformation.Fade;
+import de.malkusch.lightshow.renderer.infrastructure.transformation.GroupFactory;
 import de.malkusch.lightshow.renderer.infrastructure.transformation.RunnerFactory;
+import de.malkusch.lightshow.renderer.infrastructure.transformation.Sequence;
 import de.malkusch.lightshow.renderer.model.Address;
 import de.malkusch.lightshow.renderer.model.AlphaColor;
 import de.malkusch.lightshow.renderer.model.Color;
@@ -52,6 +55,7 @@ public final class Application {
 		var reversedIds = new ArrayList<>(lightIds);
 		Collections.reverse(reversedIds);
 		var rightToLeft = new RunnerFactory(reversedIds);
+		var allLights = new GroupFactory(lightIds);
 
 		var mixer = new AlphaBlendingMixService();
 
@@ -65,15 +69,25 @@ public final class Application {
 		renderShow.frameRate = frameRate.framesPerSecond();
 		renderShow.transformations = new ArrayList<>();
 
-		var redBlink = Fade.blink(leftCenter.id(), new Position(0), red, frameRate.duration(0, 500),
-				frameRate.duration(2, 0));
+		var highPianoColor = green.withAlpha(80);
+		var highPianoBlink = Fade.blink(leftCenter.id(), new Position(0), highPianoColor, frameRate.duration(0, 100),
+				frameRate.duration(0, 200));
 
-		var greenBlink = Fade.blink(leftCenter.id(), new Position(0), green, frameRate.duration(0, 500),
-				frameRate.duration(2, 0));
+		var pianoEnd = frameRate.position(24, 0);
 
-		renderShow.transformations.addAll(leftToRight.runner(redBlink, frameRate.position(2, 0)));
-		renderShow.transformations
-				.addAll(leftToRight.runner(greenBlink.with(frameRate.position(1, 0)), frameRate.position(3, 0)));
+		for (var position = new Position(0); !position.isAfter(pianoEnd); position = position
+				.shift(frameRate.duration(0, random(50, 150)))) {
+			var seq1 = leftToRight.runner(highPianoBlink.with(position), frameRate.duration(0, random(200, 600)));
+			position = position.shift(frameRate.duration(0, 50));
+			var seq2 = rightToLeft.runner(highPianoBlink.with(position), frameRate.duration(0, random(200, 600)));
+			renderShow.transformations.addAll(Sequence.from(seq1, seq2).transformations());
+		}
+
+		var highLoudPianoColor = highPianoColor.withAlpha(200);
+		var loudPianoBlink = Fade.blink(leftCenter.id(), frameRate.position(24, 800), highLoudPianoColor,
+				frameRate.duration(0, 150), frameRate.duration(0, 200));
+		renderShow.transformations.addAll(allLights.grouped(loudPianoBlink).transformations());
+
 		var dmx = renderShowApplicationService.renderShow(renderShow);
 
 		try (audio; dmx) {
@@ -83,6 +97,12 @@ public final class Application {
 
 			playShowApplicationService.playShow(command);
 		}
+	}
+
+	private final static Random RANDOM = new Random(1);
+
+	private static int random(int min, int max) {
+		return RANDOM.nextInt(max - min) + min;
 	}
 
 	private static InputStream open(String path) throws MalformedURLException, IOException {
