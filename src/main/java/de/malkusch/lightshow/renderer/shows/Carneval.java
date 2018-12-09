@@ -157,6 +157,32 @@ public final class Carneval {
 			add(darkRightPianoOpen.with(at(38 - 0.15)));
 		}
 
+		{
+			var bassColor = new AlphaColor(Color.RED, 170);
+			var darkness = 0.5;
+			var bass8Single = Fade.blink(frontCenter.id(), at(0), bassColor, duration(0.1), duration(0.4));
+			var bass8 = new Sequence(Filter.darker(bass8Single.with(frontLeft.id()), darkness), bass8Single,
+					Filter.darker(bass8Single.with(frontRight.id()), darkness));
+			var bass4Single = Fade.blink(bass8Single.lightId(), at(0), bassColor, duration(0.1), duration(0.9));
+			var bass4 = new Sequence(Filter.darker(bass4Single.with(frontLeft.id()), darkness), bass4Single,
+					Filter.darker(bass4Single.with(frontRight.id()), darkness));
+			var bass2Single = Fade.blink(bass8Single.lightId(), at(0), bassColor, duration(0.1), duration(1.8));
+			var bass2 = new Sequence(Filter.darker(bass2Single.with(frontLeft.id()), darkness), bass2Single,
+					Filter.darker(bass2Single.with(frontRight.id()), darkness));
+
+			var eigth = 0.36;
+
+			var bass = Sequence.from(bass8.withStart(at(38.5)), bass8.withStart(at(38.5 + eigth)),
+					bass8.withStart(at(38.5 + 2 * eigth)), bass8.withStart(at(38.5 + 3 * eigth)),
+					bass4.withStart(at(38.5 + 4 * eigth)), bass8.withStart(at(38.5 + 6 * eigth)),
+					bass8.withStart(at(38.5 + 7 * eigth)), bass8.withStart(at(38.5 + 8 * eigth)),
+					bass8.withStart(at(38.5 + 9 * eigth)), bass8.withStart(at(38.5 + 10 * eigth)),
+					bass8.withStart(at(38.5 + 11 * eigth)), bass2.withStart(at(38.5 + 12 * eigth)));
+
+			add(bass);
+			add(bass.withStart(at(38.5 + 16 * eigth)));
+		}
+
 		return transformations;
 	}
 
