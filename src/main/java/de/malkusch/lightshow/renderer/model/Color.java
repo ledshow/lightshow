@@ -3,6 +3,13 @@ package de.malkusch.lightshow.renderer.model;
 public final class Color {
 
 	public static final Color BLACK = new Color(0, 0, 0);
+	public static final Color RED = new Color(255, 0, 0);
+	public static final Color ORANGE = new Color(255, 153, 0);
+	public static final Color YELLOW = new Color(255, 255, 0);
+	public static final Color GREEN = new Color(0, 255, 0);
+	public static final Color BLUE = new Color(0, 0, 255);
+	public static final Color PURPLE = new Color(102, 0, 102);
+	public static final Color PINK = new Color(255, 0, 255);
 
 	public Color(int red, int green, int blue) {
 		this.red = assertByte(red);

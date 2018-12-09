@@ -43,6 +43,22 @@ public final class Fade extends Transformation {
 		return new Fade(lightId, start, duration, from, to);
 	}
 
+	public static Transformation fadeout(Transformation transformation, Duration fadeDuration) {
+		var fadeStart = transformation.end().next();
+		var color = transformation.transform(new FrameRate(60), transformation.end());
+		var lightId = transformation.lightId();
+		var fade = fadeout(lightId, fadeStart, fadeDuration, color);
+		return new Composition(transformation, fade);
+	}
+
+	public static Transformation fade(LightId lightId, Position start, Duration duration, AlphaColor from,
+			AlphaColor to) {
+
+		var fromTransformation = new Plain(lightId, start, duration, from);
+		var toTransformation = new Plain(lightId, start, duration, to);
+		return new Fade(lightId, start, duration, fromTransformation, toTransformation);
+	}
+
 	public Fade(LightId lightId, Position start, Duration duration, Transformation from, Transformation to) {
 		super(lightId, start, duration);
 

@@ -8,10 +8,12 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import de.malkusch.lightshow.common.model.Duration;
 import de.malkusch.lightshow.common.model.FrameRate;
 import de.malkusch.lightshow.common.model.Position;
 import de.malkusch.lightshow.renderer.infrastructure.transformation.Fade;
 import de.malkusch.lightshow.renderer.infrastructure.transformation.GroupFactory;
+import de.malkusch.lightshow.renderer.infrastructure.transformation.Rainbow;
 import de.malkusch.lightshow.renderer.infrastructure.transformation.RunnerFactory;
 import de.malkusch.lightshow.renderer.infrastructure.transformation.Sequence;
 import de.malkusch.lightshow.renderer.model.Address;
@@ -37,70 +39,100 @@ public final class Carneval {
 	private final RunnerFactory rightToLeft;
 	private final GroupFactory allLights;
 	private final AlphaColor red = new AlphaColor(new Color(255, 0, 0), 255);
-	private final AlphaColor green = new AlphaColor(new Color(0, 255, 0), 255);
+	private final FrameRate frameRate;
 
-	public Carneval() {
+	public Carneval(FrameRate frameRate) {
 		var lightIds = lights.stream().map(Light::id).collect(Collectors.toList());
 		leftToRight = new RunnerFactory(lightIds);
 		var reversedIds = new ArrayList<>(lightIds);
 		Collections.reverse(reversedIds);
 		rightToLeft = new RunnerFactory(reversedIds);
 		allLights = new GroupFactory(lightIds);
+		this.frameRate = frameRate;
 	}
 
 	public List<Light> lights() {
 		return lights;
 	}
 
-	public List<Transformation> load(FrameRate frameRate) {
+	public List<Transformation> load() {
 		var highPianoColor = new AlphaColor(new Color(0, 100, 255), 80);
-		var highPianoBlink = Fade.blink(leftCenter.id(), new Position(0), highPianoColor, frameRate.duration(0, 100),
-				frameRate.duration(0, 200));
+		var highPianoBlink = Fade.blink(leftCenter.id(), at(0), highPianoColor, duration(0.1), duration(0.2));
 
-		var pianoEnd = frameRate.position(24, 0);
+		var pianoEnd = at(24);
 
-		for (var position = new Position(0); !position.isAfter(pianoEnd); position = position
+		for (var position = at(0); !position.isAfter(pianoEnd); position = position
 				.shift(frameRate.duration(0, random(50, 150)))) {
 			var seq1 = leftToRight.runner(highPianoBlink.with(position), frameRate.duration(0, random(200, 600)));
-			position = position.shift(frameRate.duration(0, 50));
+			position = position.shift(duration(0.050));
 			var seq2 = rightToLeft.runner(highPianoBlink.with(position), frameRate.duration(0, random(200, 600)));
-			transformations.addAll(Sequence.from(seq1, seq2).transformations());
+			add(Sequence.from(seq1, seq2));
 		}
 
 		var highLoudPianoColor = highPianoColor.withAlpha(255);
-		var loudPianoBlink = Fade.blink(leftCenter.id(), frameRate.position(24, 800), highLoudPianoColor,
-				frameRate.duration(0, 150), frameRate.duration(0, 450));
-		transformations.addAll(allLights.grouped(loudPianoBlink).transformations());
+		var loudPianoBlink = Fade.blink(leftCenter.id(), at(24.8), highLoudPianoColor, duration(0.150),
+				duration(0.450));
+		add(allLights.grouped(loudPianoBlink));
 
 		var stringColor = red.withAlpha(150);
-		var string1 = leftToRight.runner(Fade.blink(leftCenter.id(), frameRate.position(6, 0), stringColor,
-				frameRate.duration(0, 100), frameRate.duration(1, 0)), frameRate.duration(0, 500));
-		var string2 = rightToLeft.runner(Fade.blink(leftCenter.id(), frameRate.position(8, 500), stringColor,
-				frameRate.duration(0, 100), frameRate.duration(1, 0)), frameRate.duration(0, 500));
+		var string1 = leftToRight.runner(Fade.blink(leftCenter.id(), at(6), stringColor, duration(0.100), duration(1)),
+				duration(0.500));
+		var string2 = rightToLeft.runner(
+				Fade.blink(leftCenter.id(), at(8.5), stringColor, duration(0.100), duration(1)), duration(0.500));
 
-		transformations.addAll(string1.withStart(frameRate.position(6, 0)).transformations());
-		transformations.addAll(string2.withStart(frameRate.position(8, 500)).transformations());
-		transformations.addAll(string1.withStart(frameRate.position(10, 800)).transformations());
-		transformations.addAll(string2.withStart(frameRate.position(13, 200)).transformations());
-		transformations.addAll(string1.withStart(frameRate.position(15, 800)).transformations());
+		add(string1.withStart(at(6)));
+		add(string2.withStart(at(8.5)));
+		add(string1.withStart(at(10.8)));
+		add(string2.withStart(at(13.2)));
+		add(string1.withStart(at(15.8)));
 
-		var string1Short = rightToLeft.runner(Fade.blink(leftCenter.id(), frameRate.position(6, 0), stringColor,
-				frameRate.duration(0, 100), frameRate.duration(1, 0)), frameRate.duration(0, 250));
-		
-		var string2Short = leftToRight.runner(Fade.blink(leftCenter.id(), frameRate.position(6, 0), stringColor,
-				frameRate.duration(0, 100), frameRate.duration(1, 0)), frameRate.duration(0, 250));
+		var string1Short = rightToLeft
+				.runner(Fade.blink(leftCenter.id(), at(6), stringColor, duration(0.100), duration(1)), duration(0.250));
 
-		transformations.addAll(string1Short.withStart(frameRate.position(17, 900)).transformations());
-		transformations.addAll(string2Short.withStart(frameRate.position(18, 700)).transformations());
-		transformations.addAll(string1Short.withStart(frameRate.position(19, 700)).transformations());
-		transformations.addAll(string2Short.withStart(frameRate.position(20, 750)).transformations());
-		transformations.addAll(string1Short.withStart(frameRate.position(21, 900)).transformations());
-		transformations.addAll(string2Short.withStart(frameRate.position(23, 0)).transformations());
+		var string2Short = leftToRight
+				.runner(Fade.blink(leftCenter.id(), at(6), stringColor, duration(0.100), duration(1)), duration(0.250));
+
+		add(string1Short.withStart(at(17.9)));
+		add(string2Short.withStart(at(18.7)));
+		add(string1Short.withStart(at(19.7)));
+		add(string2Short.withStart(at(20.75)));
+		add(string1Short.withStart(at(21.9)));
+		add(string2Short.withStart(at(23)));
+
+		add(Rainbow.running(frameRate.position(25, 900), duration(0.700), rightToLeft, duration(3)));
 
 		return transformations;
 	}
-	
-	
+
+	private Duration duration(int seconds) {
+		return frameRate.duration(seconds, 0);
+	}
+
+	private Duration duration(double seconds) {
+		var intSeconds = (int) seconds;
+		var milliseconds = (int) Math.round((seconds - intSeconds) * 1000);
+		if (milliseconds < 0) {
+			milliseconds = 0;
+		}
+		return frameRate.duration(intSeconds, milliseconds);
+	}
+
+	private Position at(int second) {
+		return frameRate.position(second, 0);
+	}
+
+	private Position at(double second) {
+		var intSecond = (int) second;
+		var millisecond = (int) Math.round((second - intSecond) * 1000);
+		if (millisecond < 0) {
+			millisecond = 0;
+		}
+		return frameRate.position(intSecond, millisecond);
+	}
+
+	private void add(Sequence sequence) {
+		transformations.addAll(sequence.transformations());
+	}
 
 	private final static Random RANDOM = new Random(1);
 

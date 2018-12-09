@@ -2,7 +2,7 @@ package de.malkusch.lightshow.player.infrastructure;
 
 import de.malkusch.lightshow.common.model.DmxStream;
 
-final class DmxPlayerFactory {
+final class DmxPlayerFactory implements AutoCloseable {
 
 	private final int universe;
 	private final DmxBus bus;
@@ -14,6 +14,11 @@ final class DmxPlayerFactory {
 
 	public DmxPlayer build(DmxStream dmxStream) {
 		return new DmxFramePlayer(universe, bus, dmxStream);
+	}
+
+	@Override
+	public void close() throws Exception {
+		bus.close();
 	}
 
 }

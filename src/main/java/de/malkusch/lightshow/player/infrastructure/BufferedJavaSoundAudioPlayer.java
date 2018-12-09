@@ -34,6 +34,10 @@ final class BufferedJavaSoundAudioPlayer implements AudioPlayer {
 		line.open(format, bufferSize);
 
 		reader = new Thread(this::fillBuffer, "audio");
+		reader.setDaemon(true);
+		reader.setUncaughtExceptionHandler((t, e) -> {
+			LOGGER.error("Audio player terminated", e);
+		});
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import de.malkusch.lightshow.common.model.Duration;
@@ -15,6 +16,10 @@ import de.malkusch.lightshow.renderer.model.Transformation;
 public final class Sequence {
 
 	private final List<Transformation> transformations;
+
+	public Sequence(Transformation... transformations) {
+		this(Arrays.asList(transformations));
+	}
 
 	public Sequence(List<Transformation> transformations) {
 		if (requireNonNull(transformations).isEmpty()) {
@@ -51,6 +56,10 @@ public final class Sequence {
 		var delta = start.frame() - start().frame();
 		var shifted = transformations.stream().map(it -> it.with(it.start().shift(delta))).collect(Collectors.toList());
 		return new Sequence(shifted);
+	}
+
+	public Sequence attachToEach(Function<Transformation, Transformation> attach) {
+		return new Sequence(transformations.stream().map(attach).toArray(Transformation[]::new));
 	}
 
 	public Sequence repeat(int times) {

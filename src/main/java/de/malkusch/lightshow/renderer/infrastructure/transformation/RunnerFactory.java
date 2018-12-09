@@ -37,4 +37,8 @@ public final class RunnerFactory {
 		return runner(first, new Duration(last.frame() - first.start().frame()));
 	}
 
+	public List<LightId> lightIds() {
+		return lightIds;
+	}
+
 }

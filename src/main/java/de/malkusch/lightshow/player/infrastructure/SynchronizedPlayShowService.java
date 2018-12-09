@@ -56,4 +56,9 @@ final class SynchronizedPlayShowService implements PlayShowService {
 		}
 	}
 
+	@Override
+	public void close() throws Exception {
+		dmxPlayerFactory.close();
+	}
+
 }

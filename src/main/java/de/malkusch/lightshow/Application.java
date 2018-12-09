@@ -20,12 +20,11 @@ public final class Application {
 
 	public static void main(String[] args) throws Exception {
 
-		var show = new Carneval();
+		var frameRate = new FrameRate(120);
+		var show = new Carneval(frameRate);
 
 		var bufferFrames = 5000;
-		var frameRate = new FrameRate(120);
 		var infrastructure = new InfrastructureConfiguration(bufferFrames, frameRate);
-		var playShowApplicationService = new PlayShowApplicationService(infrastructure.playShowService());
 		var audio = open("file://" + args[0]);
 
 		var lights = new ListLightRepository(show.lights());
@@ -35,11 +34,13 @@ public final class Application {
 
 		var renderShow = new RenderShow();
 		renderShow.frameRate = frameRate.framesPerSecond();
-		renderShow.transformations = show.load(frameRate);
+		renderShow.transformations = show.load();
 
 		var dmx = renderShowApplicationService.renderShow(renderShow);
 
-		try (audio; dmx) {
+		var playShowService = infrastructure.playShowService();
+		var playShowApplicationService = new PlayShowApplicationService(playShowService);
+		try (audio; dmx; playShowService) {
 			var command = new PlayShow();
 			command.audioStream = audio;
 			command.dmxStream = dmx;

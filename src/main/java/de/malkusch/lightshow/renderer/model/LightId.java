@@ -4,6 +4,8 @@ import static java.util.Objects.requireNonNull;
 
 public final class LightId {
 
+	public static final LightId ANY = new LightId("any");
+
 	private final String value;
 
 	public LightId(String value) {

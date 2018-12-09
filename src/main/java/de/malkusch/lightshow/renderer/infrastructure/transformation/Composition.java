@@ -3,6 +3,8 @@ package de.malkusch.lightshow.renderer.infrastructure.transformation;
 import static java.util.Arrays.stream;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.stream.Stream;
 
 import de.malkusch.lightshow.common.model.Duration;
 import de.malkusch.lightshow.common.model.FrameRate;
@@ -15,9 +17,39 @@ public final class Composition extends Transformation {
 
 	private Transformation[] transformations;
 
+	public Composition(Collection<Transformation> transformations) {
+		this(transformations.toArray(Transformation[]::new));
+	}
+
 	public Composition(Transformation... transformations) {
 		super(assertSameLightId(transformations), start(transformations), duration(transformations));
-		this.transformations = transformations;
+		this.transformations = assertNonOverlapping(assertGapLess(transformations));
+	}
+
+	private static Transformation[] assertNonOverlapping(Transformation[] transformations) {
+		stream(transformations).forEach(transformation -> {
+			stream(transformations).filter(other -> other != transformation)
+					.flatMap(other -> Stream.of(other.start(), other.end()))
+					.filter(p -> p.isWithin(transformation.start(), transformation.end())).findAny()
+					.ifPresent(other -> {
+						throw new IllegalArgumentException(
+								String.format("%s and %s should not overlap", transformation, other));
+					});
+		});
+		return transformations;
+	}
+
+	private static Transformation[] assertGapLess(Transformation[] transformations) {
+		var start = start(transformations);
+		stream(transformations).forEach(transformation -> {
+			if (transformation.start().equals(start)) {
+				return;
+			}
+			stream(transformations).map(Transformation::end).filter(end -> end.next().equals(transformation.start()))
+					.findAny().orElseThrow(
+							() -> new IllegalArgumentException(String.format("%s introduced a gap", transformation)));
+		});
+		return transformations;
 	}
 
 	@Override
