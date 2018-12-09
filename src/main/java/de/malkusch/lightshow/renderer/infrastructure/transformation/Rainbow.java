@@ -26,7 +26,7 @@ public final class Rainbow extends Transformation {
 
 		var rainbow = new Rainbow(LightId.ANY, start, duration);
 		var lightCount = runnerFactory.lightIds().size();
-		var clipped = new Clip(new Duration(duration.dividedBy(lightCount).frames() - lightCount), rainbow);
+		var clipped = new Clip(new Duration(duration.dividedBy(lightCount).frames() - lightCount/2), rainbow);
 		var run = runnerFactory.runner(clipped, duration);
 		var fadingRun = run.attachToEach(t -> Fade.fadeout(t, fadeDuration));
 		return fadingRun;

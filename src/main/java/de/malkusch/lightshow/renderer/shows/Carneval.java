@@ -72,7 +72,7 @@ public final class Carneval {
 			}
 
 			var highLoudPianoColor = highPianoColor.withAlpha(255);
-			var loudPianoBlink = Fade.blink(leftCenter.id(), at(24.8), highLoudPianoColor, duration(0.150),
+			var loudPianoBlink = Fade.blink(leftCenter.id(), at(24.75), highLoudPianoColor, duration(0.150),
 					duration(0.450));
 			add(allLights.grouped(loudPianoBlink));
 
@@ -101,7 +101,7 @@ public final class Carneval {
 			add(string1Short.withStart(at(21.9)));
 			add(string2Short.withStart(at(23)));
 
-			add(Rainbow.running(at(25.9), duration(0.700), rightToLeft, duration(3)));
+			add(Rainbow.running(at(25.7), duration(0.800), rightToLeft, duration(3)));
 		}
 
 		// silence
@@ -115,46 +115,46 @@ public final class Carneval {
 			var leftPianoOpen = rightPianoOpen.with(leftPianoId);
 			var darkLeftPianoOpen = Filter.darker(leftPianoOpen, 0.5);
 
-			add(rightPiano.with(at(29.600)));
-			add(rightPiano.with(at(30)));
-			add(rightPianoOpen.with(at(30.200)));
+			add(rightPiano.with(at(29.450)));
+			add(rightPiano.with(at(29.85)));
+			add(rightPianoOpen.with(at(30.050)));
 
-			add(rightPiano.with(at(30.7)));
-			add(rightPiano.with(at(31)));
-			add(rightPianoOpen.with(at(31.200)));
+			add(rightPiano.with(at(30.55)));
+			add(rightPiano.with(at(30.85)));
+			add(rightPianoOpen.with(at(31.050)));
 
-			add(withLights(rightPiano.with(at(31.7)), leftPianoId));
-			add(withLights(rightPiano.with(at(32.07)), leftPianoId));
-			add(withLights(rightPianoOpen.with(at(32.300)), leftPianoId));
+			add(withLights(rightPiano.with(at(31.7 - 0.15)), leftPianoId));
+			add(withLights(rightPiano.with(at(32.07 - 0.15)), leftPianoId));
+			add(withLights(rightPianoOpen.with(at(32.300 - 0.15)), leftPianoId));
 
-			add(withLights(rightPiano.with(at(32.81)), leftPianoId));
-			add(withLights(rightPiano.with(at(33.1)), leftPianoId));
-			add(withLights(rightPianoOpen.with(at(33.310)), leftPianoId));
+			add(withLights(rightPiano.with(at(32.81 - 0.15)), leftPianoId));
+			add(withLights(rightPiano.with(at(33.1 - 0.15)), leftPianoId));
+			add(withLights(rightPianoOpen.with(at(33.310 - 0.15)), leftPianoId));
 
-			add(withLights(rightPiano.with(at(33.82)), leftPianoId));
-			add(withLights(rightPiano.with(at(34.1)), leftPianoId));
-			add(withLights(rightPianoOpen.with(at(34.35)), leftPianoId));
+			add(withLights(rightPiano.with(at(33.82 - 0.15)), leftPianoId));
+			add(withLights(rightPiano.with(at(34.1 - 0.15)), leftPianoId));
+			add(withLights(rightPianoOpen.with(at(34.35 - 0.15)), leftPianoId));
 
-			add(leftPianoOpen.with(at(34.85)));
-			add(darkRightPianoOpen.with(at(34.85)));
+			add(leftPianoOpen.with(at(34.85 - 0.15)));
+			add(darkRightPianoOpen.with(at(34.85 - 0.15)));
 
-			add(rightPianoOpen.with(at(35.35)));
-			add(darkLeftPianoOpen.with(at(35.35)));
+			add(rightPianoOpen.with(at(35.35 - 0.15)));
+			add(darkLeftPianoOpen.with(at(35.35 - 0.15)));
 
-			add(leftPianoOpen.with(at(35.87)));
-			add(darkRightPianoOpen.with(at(35.87)));
+			add(leftPianoOpen.with(at(35.87 - 0.15)));
+			add(darkRightPianoOpen.with(at(35.87 - 0.15)));
 
-			add(rightPianoOpen.with(at(36.4)));
-			add(darkLeftPianoOpen.with(at(36.4)));
+			add(rightPianoOpen.with(at(36.4 - 0.15)));
+			add(darkLeftPianoOpen.with(at(36.4 - 0.15)));
 
-			add(leftPianoOpen.with(at(36.93)));
-			add(darkRightPianoOpen.with(at(36.93)));
+			add(leftPianoOpen.with(at(36.93 - 0.15)));
+			add(darkRightPianoOpen.with(at(36.93 - 0.15)));
 
-			add(rightPianoOpen.with(at(37.46)));
-			add(darkLeftPianoOpen.with(at(37.46)));
+			add(rightPianoOpen.with(at(37.46 - 0.15)));
+			add(darkLeftPianoOpen.with(at(37.46 - 0.15)));
 
-			add(leftPianoOpen.with(at(38)));
-			add(darkRightPianoOpen.with(at(38)));
+			add(leftPianoOpen.with(at(38 - 0.15)));
+			add(darkRightPianoOpen.with(at(38 - 0.15)));
 		}
 
 		return transformations;
