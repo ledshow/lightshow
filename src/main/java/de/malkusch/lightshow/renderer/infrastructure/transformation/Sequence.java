@@ -21,7 +21,7 @@ public final class Sequence {
 		this(Arrays.asList(transformations));
 	}
 
-	public Sequence(List<Transformation> transformations) {
+	public Sequence(List<? extends Transformation> transformations) {
 		if (requireNonNull(transformations).isEmpty()) {
 			throw new IllegalArgumentException("Must not be empty");
 		}

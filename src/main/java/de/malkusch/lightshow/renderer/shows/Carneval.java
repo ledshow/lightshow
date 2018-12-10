@@ -13,6 +13,7 @@ import de.malkusch.lightshow.common.model.FrameRate;
 import de.malkusch.lightshow.common.model.Position;
 import de.malkusch.lightshow.renderer.infrastructure.transformation.Fade;
 import de.malkusch.lightshow.renderer.infrastructure.transformation.Filter;
+import de.malkusch.lightshow.renderer.infrastructure.transformation.GradientFactory;
 import de.malkusch.lightshow.renderer.infrastructure.transformation.GroupFactory;
 import de.malkusch.lightshow.renderer.infrastructure.transformation.Rainbow;
 import de.malkusch.lightshow.renderer.infrastructure.transformation.RunnerFactory;
@@ -158,29 +159,55 @@ public final class Carneval {
 		}
 
 		{
-			var bassColor = new AlphaColor(Color.RED, 170);
-			var darkness = 0.5;
-			var bass8Single = Fade.blink(frontCenter.id(), at(0), bassColor, duration(0.1), duration(0.4));
-			var bass8 = new Sequence(Filter.darker(bass8Single.with(frontLeft.id()), darkness), bass8Single,
-					Filter.darker(bass8Single.with(frontRight.id()), darkness));
-			var bass4Single = Fade.blink(bass8Single.lightId(), at(0), bassColor, duration(0.1), duration(0.9));
-			var bass4 = new Sequence(Filter.darker(bass4Single.with(frontLeft.id()), darkness), bass4Single,
-					Filter.darker(bass4Single.with(frontRight.id()), darkness));
-			var bass2Single = Fade.blink(bass8Single.lightId(), at(0), bassColor, duration(0.1), duration(1.8));
-			var bass2 = new Sequence(Filter.darker(bass2Single.with(frontLeft.id()), darkness), bass2Single,
-					Filter.darker(bass2Single.with(frontRight.id()), darkness));
+			var violinColor = new AlphaColor(Color.RED, 200);
+			var bassDarkness = 0.5;
+			var leftGradient = new GradientFactory(frontCenter.id(), frontLeft.id(), leftFront.id(), leftCenter.id());
+			var rightGradient = new GradientFactory(frontCenter.id(), frontRight.id(), rightFront.id(),
+					rightCenter.id());
 
-			var eigth = 0.36;
+			var violin8Single = Fade.blink(frontCenter.id(), at(0), violinColor, duration(0.1), duration(0.4));
+			var bass8Single = Filter.darker(violin8Single, bassDarkness);
+			var black8 = new Filter(bass8Single, c -> c.withAlpha(0));
+			var bass8 = Sequence.from(leftGradient.gradient(bass8Single, black8),
+					rightGradient.gradient(bass8Single, black8));
+			var violin8 = allLights.grouped(violin8Single);
 
-			var bass = Sequence.from(bass8.withStart(at(38.5)), bass8.withStart(at(38.5 + eigth)),
-					bass8.withStart(at(38.5 + 2 * eigth)), bass8.withStart(at(38.5 + 3 * eigth)),
-					bass4.withStart(at(38.5 + 4 * eigth)), bass8.withStart(at(38.5 + 6 * eigth)),
-					bass8.withStart(at(38.5 + 7 * eigth)), bass8.withStart(at(38.5 + 8 * eigth)),
-					bass8.withStart(at(38.5 + 9 * eigth)), bass8.withStart(at(38.5 + 10 * eigth)),
-					bass8.withStart(at(38.5 + 11 * eigth)), bass2.withStart(at(38.5 + 12 * eigth)));
+			var violin4Single = Fade.blink(bass8Single.lightId(), at(0), violinColor, duration(0.1), duration(1));
+			var bass4Single = Filter.darker(violin4Single, bassDarkness);
+			var black4 = new Filter(bass4Single, c -> c.withAlpha(0));
+			var bass4 = Sequence.from(leftGradient.gradient(bass4Single, black4),
+					rightGradient.gradient(bass4Single, black4));
+			var violin4 = allLights.grouped(violin4Single);
 
-			add(bass);
-			add(bass.withStart(at(38.5 + 16 * eigth)));
+			var violin2Single = Fade.blink(bass8Single.lightId(), at(0), violinColor, duration(0.1), duration(1.8));
+			var bass2Single = Filter.darker(violin2Single, bassDarkness);
+			var black2 = new Filter(bass2Single, c -> c.withAlpha(0));
+			var bass2 = Sequence.from(leftGradient.gradient(bass2Single, black2),
+					rightGradient.gradient(bass2Single, black2));
+			var violin2 = allLights.grouped(violin2Single);
+
+			var eigth = 0.3619;
+			var start = 38.52;
+
+			var quiet = Sequence.from(bass8.withStart(at(start)), bass8.withStart(at(start + eigth)),
+					bass8.withStart(at(start + 2 * eigth)), bass8.withStart(at(start + 3 * eigth)),
+					bass4.withStart(at(start + 4 * eigth)), bass8.withStart(at(start + 6 * eigth)),
+					bass8.withStart(at(start + 7 * eigth)), bass8.withStart(at(start + 8 * eigth)),
+					bass8.withStart(at(start + 9 * eigth)), bass8.withStart(at(start + 10 * eigth)),
+					bass8.withStart(at(start + 11 * eigth)), bass2.withStart(at(start + 12 * eigth)));
+
+			var loud = Sequence.from(violin8.withStart(at(start)), violin8.withStart(at(start + eigth)),
+					violin8.withStart(at(start + 2 * eigth)), violin8.withStart(at(start + 3 * eigth)),
+					violin4.withStart(at(start + 4 * eigth)), violin8.withStart(at(start + 6 * eigth)),
+					violin8.withStart(at(start + 7 * eigth)), violin8.withStart(at(start + 8 * eigth)),
+					violin8.withStart(at(start + 9 * eigth)), violin8.withStart(at(start + 10 * eigth)),
+					violin8.withStart(at(start + 11 * eigth)), violin2.withStart(at(start + 12 * eigth)));
+
+			add(quiet);
+			add(quiet.withStart(at(start + 16 * eigth)));
+
+			add(loud.withStart(at(start + 32 * eigth)));
+			add(loud.withStart(at(start + 48 * eigth)));
 		}
 
 		return transformations;

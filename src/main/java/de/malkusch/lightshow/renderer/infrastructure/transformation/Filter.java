@@ -11,10 +11,24 @@ import de.malkusch.lightshow.renderer.model.Transformation;
 public final class Filter extends Transformation {
 
 	public static Filter darker(Transformation transformation, double darkness) {
+		return new Filter(transformation, darkness(darkness));
+	}
+
+	public static Sequence darker(Sequence sequence, double darkness) {
+		return filter(sequence, darkness(darkness));
+	}
+
+	private static Function<AlphaColor, AlphaColor> darkness(double darkness) {
 		if (!(darkness >= 0 && darkness <= 1)) {
 			throw new IllegalArgumentException("Must be within 1 and 0");
 		}
-		return new Filter(transformation, c -> c.withAlpha((int) Math.round(c.alpha() * darkness)));
+		return c -> c.withAlpha((int) Math.round(c.alpha() * darkness));
+	}
+
+	public static Sequence filter(Sequence sequence, Function<AlphaColor, AlphaColor> filter) {
+		var filtered = sequence.transformations().stream().map(it -> new Filter(it, filter))
+				.toArray(Transformation[]::new);
+		return new Sequence(filtered);
 	}
 
 	private final Transformation transformation;
