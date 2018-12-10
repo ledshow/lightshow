@@ -44,7 +44,7 @@ public final class Application {
 			var command = new PlayShow();
 			command.audioStream = audio;
 			command.dmxStream = dmx;
-			command.start = 37;
+			command.start = 57;
 
 			playShowApplicationService.playShow(command);
 		}

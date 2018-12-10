@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import de.malkusch.lightshow.common.model.Duration;
 import de.malkusch.lightshow.common.model.Position;
+import de.malkusch.lightshow.renderer.model.LightId;
 import de.malkusch.lightshow.renderer.model.Transformation;
 
 public final class Sequence {
@@ -56,6 +57,11 @@ public final class Sequence {
 		var delta = start.frame() - start().frame();
 		var shifted = transformations.stream().map(it -> it.with(it.start().shift(delta))).collect(Collectors.toList());
 		return new Sequence(shifted);
+	}
+
+	public Sequence with(LightId lightId) {
+		var changed = transformations.stream().map(it -> it.with(lightId)).collect(Collectors.toList());
+		return new Sequence(changed);
 	}
 
 	public Sequence attachToEach(Function<Transformation, Transformation> attach) {

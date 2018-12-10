@@ -208,6 +208,36 @@ public final class Carneval {
 
 			add(loud.withStart(at(start + 32 * eigth)));
 			add(loud.withStart(at(start + 48 * eigth)));
+
+			var leftPianoColor = new AlphaColor(Color.PINK, 255);
+			var leftPianoLight = leftFront.id();
+			var leftPiano = new Sequence(
+					Fade.blink(leftPianoLight, at(43.4), leftPianoColor, duration(0.1), duration(0.7)),
+					Fade.blink(leftPianoLight, at(43.7), leftPianoColor, duration(0.1), duration(0.5)),
+					Fade.blink(leftPianoLight, at(43.9), leftPianoColor, duration(0.1), duration(0.5)),
+					Fade.blink(leftPianoLight, at(44.1), leftPianoColor, duration(0.1), duration(0.5)),
+					Fade.blink(leftPianoLight, at(44.25), leftPianoColor, duration(0.1), duration(0.5)),
+					Fade.blink(leftPianoLight, at(44.41), leftPianoColor, duration(0.1), duration(0.7)));
+
+			var rightPiano = Filter.filter(leftPiano.with(rightFront.id()), c -> new AlphaColor(Color.PINK, c.alpha()));
+
+			add(leftPiano);
+			add(rightPiano.withStart(at(49.15)));
+
+			var highPianoColor = new AlphaColor(Color.PINK, 255);
+			var highPianoLight = frontRight.id();
+			var highPiano = new Sequence(
+					Fade.blink(highPianoLight, at(54.56), highPianoColor.withAlpha(200), duration(0.1), duration(0.8)),
+					Fade.blink(highPianoLight, at(55.30), highPianoColor, duration(0.1), duration(0.7)));
+
+			add(highPiano);
+
+			var lastPianoLight = frontLeft.id();
+			var lastPianoColor = new AlphaColor(Color.PINK, 255);
+			var lastPiano = new Sequence(
+					Fade.blink(lastPianoLight, at(60.55), lastPianoColor, duration(0.1), duration(1.5)),
+					Fade.blink(lastPianoLight, at(61.3), lastPianoColor, duration(0.1), duration(0.7)));
+			add(lastPiano);
 		}
 
 		return transformations;

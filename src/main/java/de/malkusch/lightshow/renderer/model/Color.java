@@ -10,6 +10,8 @@ public final class Color {
 	public static final Color BLUE = new Color(0, 0, 255);
 	public static final Color PURPLE = new Color(102, 0, 102);
 	public static final Color PINK = new Color(255, 0, 255);
+	public static final Color AQUA = new Color(0, 255, 255);
+	public static final Color AQUAMARINE = new Color(255 / 2, 255, (int) (255 * 0.83));
 
 	public Color(int red, int green, int blue) {
 		this.red = assertByte(red);
