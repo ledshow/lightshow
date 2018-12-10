@@ -9,6 +9,12 @@
 		<java-version>10</java-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
 	<dependencies>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -16,9 +22,9 @@
 			<version>1.8.0-beta2</version>
 		</dependency>
 		<dependency>
-			<groupId>ch.bildspur.artnet</groupId>
-			<artifactId>artnet</artifactId>
-			<version>1.0</version>
+			<groupId>com.github.cansik</groupId>
+			<artifactId>artnet4j</artifactId>
+			<version>0.4.0</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
