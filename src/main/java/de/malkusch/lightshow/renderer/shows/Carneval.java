@@ -61,16 +61,8 @@ public final class Carneval {
 		{
 			var highPianoColor = new AlphaColor(new Color(0, 100, 255), 80);
 			var highPianoBlink = Fade.blink(leftCenter.id(), at(0), highPianoColor, duration(0.1), duration(0.2));
-
-			var pianoEnd = at(24);
-
-			for (var position = at(0); !position.isAfter(pianoEnd); position = position
-					.shift(frameRate.duration(0, random(50, 150)))) {
-				var seq1 = leftToRight.runner(highPianoBlink.with(position), frameRate.duration(0, random(200, 600)));
-				position = position.shift(duration(0.050));
-				var seq2 = rightToLeft.runner(highPianoBlink.with(position), frameRate.duration(0, random(200, 600)));
-				add(Sequence.from(seq1, seq2));
-			}
+			var water = random(at(0), at(24), highPianoBlink);
+			add(water);
 
 			var highLoudPianoColor = highPianoColor.withAlpha(255);
 			var loudPianoBlink = Fade.blink(leftCenter.id(), at(24.75), highLoudPianoColor, duration(0.150),
@@ -238,9 +230,36 @@ public final class Carneval {
 					Fade.blink(lastPianoLight, at(60.55), lastPianoColor, duration(0.1), duration(1.5)),
 					Fade.blink(lastPianoLight, at(61.3), lastPianoColor, duration(0.1), duration(0.7)));
 			add(lastPiano);
+
+			var rumbleStart = at(61.8);
+			var rumbleEnd = at(64.5);
+			var rumbleColor = violinColor.withAlpha((int) (violinColor.alpha() * bassDarkness));
+			var rumble = random(rumbleStart, rumbleEnd,
+					Fade.blink(leftCenter.id(), at(0), rumbleColor, duration(0.1), duration(0.2)));
+			var fadein = allLights
+					.grouped(Fade.fadein(leftCenter.id(), rumbleStart, duration(1.35), rumbleColor.withAlpha(200)));
+			var fadeout = allLights
+					.grouped(Fade.fadeout(leftCenter.id(), fadein.end(), duration(1.35), rumbleColor.withAlpha(200)));
+
+			add(rumble);
+			add(fadein);
+			add(fadeout);
 		}
 
 		return transformations;
+	}
+
+	private Sequence random(Position start, Position end, Transformation transformation) {
+		var transformations = new ArrayList<Transformation>();
+		for (var position = start; !position.isAfter(end); position = position
+				.shift(frameRate.duration(0, random(50, 150)))) {
+			var seq1 = leftToRight.runner(transformation.with(position), frameRate.duration(0, random(200, 600)));
+			position = position.shift(duration(0.050));
+			var seq2 = rightToLeft.runner(transformation.with(position), frameRate.duration(0, random(200, 600)));
+			transformations.addAll(seq1.transformations());
+			transformations.addAll(seq2.transformations());
+		}
+		return new Sequence(transformations);
 	}
 
 	private Sequence withLights(Transformation transformation, LightId... ids) {
